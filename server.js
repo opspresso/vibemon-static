@@ -24,11 +24,15 @@ const server = http.createServer((req, res) => {
     let filePath = path.join(DOCS_DIR, req.url === '/' ? 'index.html' : req.url);
     
     // Security: prevent directory traversal
-    if (!filePath.startsWith(DOCS_DIR)) {
+    const resolvedPath = path.resolve(filePath);
+    const resolvedDocsDir = path.resolve(DOCS_DIR);
+    if (!resolvedPath.startsWith(resolvedDocsDir)) {
         res.writeHead(403, { 'Content-Type': 'text/plain' });
         res.end('403 Forbidden');
         return;
     }
+    
+    filePath = resolvedPath;
 
     const ext = path.extname(filePath);
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
