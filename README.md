@@ -23,15 +23,15 @@ The `docs` folder contains:
 ```html
 <div class="vibemon-display" id="vibemon-display"></div>
 <script type="module">
-import { createVibeMonEngine } from 'https://static.vibemon.toast.sh/js/vibemon-engine-standalone.js';
+import { createVibeMonEngine } from 'https://static.vibemon.io/js/vibemon-engine-standalone.js';
 
 const container = document.getElementById('vibemon-display');
 const engine = createVibeMonEngine(container, {
   useEmoji: true,
   characterImageUrls: {
-    clawd: 'https://static.vibemon.toast.sh/characters/clawd.png',
-    kiro: 'https://static.vibemon.toast.sh/characters/kiro.png',
-    claw: 'https://static.vibemon.toast.sh/characters/claw.png'
+    clawd: 'https://static.vibemon.io/characters/clawd.png',
+    kiro: 'https://static.vibemon.io/characters/kiro.png',
+    claw: 'https://static.vibemon.io/characters/claw.png'
   }
 });
 
@@ -65,7 +65,7 @@ engine.startAnimation();
 ## Access
 
 The site is available at:
-- https://static.vibemon.toast.sh (primary)
+- https://static.vibemon.io (primary)
 - https://nalbam.github.io/vibemon-static/
 
 ## Project Structure
