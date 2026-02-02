@@ -1,0 +1,14 @@
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# claude
+.claude/
+.prompt-*.md
+.prompt.md
+prompt-*.md
+prompt.md
+docs/plans/

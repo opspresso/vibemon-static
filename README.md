@@ -4,7 +4,7 @@ Static files (JS, PNG, etc.) served via GitHub Pages from the `docs` folder.
 
 ## About
 
-This repository contains static web assets that are automatically served by GitHub Pages.
+This repository contains static web assets for VibeMon - a real-time status monitor for AI assistants (Claude Code, Kiro, OpenClaw) with pixel art characters.
 
 ## Files
 
@@ -13,21 +13,76 @@ The `docs` folder contains:
 - `style.css` - Stylesheet
 - `app.js` - JavaScript application
 - `logo.png` - Sample image file
+- `js/vibemon-engine-standalone.js` - VibeMon rendering engine
+- `characters/` - Character images (clawd.png, kiro.png, claw.png)
+
+## VibeMon Engine
+
+### Usage
+
+```html
+<div class="vibemon-display" id="vibemon-display"></div>
+<script type="module">
+import { createVibeMonEngine } from 'https://static.vibemon.toast.sh/js/vibemon-engine-standalone.js';
+
+const container = document.getElementById('vibemon-display');
+const engine = createVibeMonEngine(container, {
+  useEmoji: true,
+  characterImageUrls: {
+    clawd: 'https://static.vibemon.toast.sh/characters/clawd.png',
+    kiro: 'https://static.vibemon.toast.sh/characters/kiro.png',
+    claw: 'https://static.vibemon.toast.sh/characters/claw.png'
+  }
+});
+
+await engine.init();
+engine.setState({ state: 'working', tool: 'Bash', project: 'my-project' });
+engine.render();
+engine.startAnimation();
+</script>
+```
+
+### States
+
+| State | Color | Description |
+|-------|-------|-------------|
+| `start` | Cyan | Session begins |
+| `idle` | Green | Waiting for input |
+| `thinking` | Purple | Processing prompt |
+| `planning` | Teal | Plan mode active |
+| `working` | Blue | Tool executing |
+| `packing` | Gray | Context compacting |
+| `notification` | Yellow | User input needed |
+| `done` | Green | Tool completed |
+| `sleep` | Navy | 5min inactivity |
+
+### Characters
+
+- `clawd` - Orange (Claude Code)
+- `kiro` - White ghost (Kiro)
+- `claw` - Red (OpenClaw)
 
 ## Access
 
 The site is available at:
+- https://static.vibemon.toast.sh (primary)
 - https://nalbam.github.io/vibemon-static/
 
 ## Project Structure
 
 ```
 vibemon-static/
-├── docs/           # Static files served by GitHub Pages
-│   ├── index.html
-│   ├── style.css
-│   ├── app.js
-│   └── logo.png
+├── docs/
+│   ├── index.html      # Landing page
+│   ├── demo.html       # Live demo (simulator)
+│   ├── demo.css
+│   ├── demo.js
+│   ├── js/
+│   │   └── vibemon-engine-standalone.js
+│   └── characters/
+│       ├── clawd.png
+│       ├── kiro.png
+│       └── claw.png
 └── README.md
 ```
 
