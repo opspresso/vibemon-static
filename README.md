@@ -1,49 +1,12 @@
 # vibemon-static
 
-A simple HTTP server for serving static files (JS, PNG, etc.) from the `docs` folder.
+Static files (JS, PNG, etc.) served via GitHub Pages from the `docs` folder.
 
-## Features
+## About
 
-- Serves static files from the `docs` directory
-- Supports common file types: HTML, CSS, JavaScript, images (PNG, JPG, GIF, SVG), etc.
-- Simple and lightweight using Node.js built-in HTTP module
-- No external dependencies required
+This repository contains static web assets that are automatically served by GitHub Pages.
 
-## Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/nalbam/vibemon-static.git
-cd vibemon-static
-
-# No dependencies to install!
-```
-
-## Usage
-
-```bash
-# Start the server
-npm start
-
-# Or run directly
-node server.js
-```
-
-The server will start on port 8080 by default. You can customize the port using the `PORT` environment variable:
-
-```bash
-PORT=3000 npm start
-```
-
-## Access
-
-Once the server is running, open your browser and navigate to:
-
-- http://localhost:8080/
-
-The server will serve files from the `docs` folder. The main page (`index.html`) will be served at the root path.
-
-## Files Served
+## Files
 
 The `docs` folder contains:
 - `index.html` - Main HTML page
@@ -51,19 +14,33 @@ The `docs` folder contains:
 - `app.js` - JavaScript application
 - `logo.png` - Sample image file
 
+## Access
+
+The site is available at:
+- https://nalbam.github.io/vibemon-static/
+
 ## Project Structure
 
 ```
 vibemon-static/
-├── docs/           # Static files to be served
+├── docs/           # Static files served by GitHub Pages
 │   ├── index.html
 │   ├── style.css
 │   ├── app.js
 │   └── logo.png
-├── server.js       # HTTP server
-├── package.json
 └── README.md
 ```
+
+## GitHub Pages Setup
+
+This repository uses GitHub Pages to serve the contents of the `docs` folder.
+
+To enable GitHub Pages:
+1. Go to repository Settings
+2. Navigate to Pages section
+3. Select "Deploy from a branch"
+4. Choose branch (e.g., `main` or `master`) and `/docs` folder
+5. Save the configuration
 
 ## License
 
