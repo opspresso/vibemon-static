@@ -184,7 +184,7 @@ const CHARACTER_CONFIG = {
 
 const TOOL_TEXTS = {
   bash: "Running", read: "Reading", edit: "Editing", write: "Writing",
-  grep: "Searching", glob: "Scanning", task: "Working",
+  grep: "Searching", glob: "Scanning", task: "Tasking",
   webfetch: "Fetching", websearch: "Searching", default: "Working"
 };
 
