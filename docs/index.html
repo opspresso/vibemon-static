@@ -1,104 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeMon Static Server</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #1a1a2e;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #e0e0e0;
-    }
-    .container {
-      text-align: center;
-      padding: 40px;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      color: #fff;
-    }
-    p {
-      color: #888;
-      margin-bottom: 30px;
-    }
-    .links {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    a {
-      display: inline-block;
-      padding: 12px 24px;
-      background: linear-gradient(135deg, #9933FF 0%, #6600CC 100%);
-      color: #fff;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 500;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(153, 51, 255, 0.4);
-    }
-    .files {
-      margin-top: 40px;
-      text-align: left;
-      background: rgba(255,255,255,0.05);
-      padding: 20px;
-      border-radius: 12px;
-      display: inline-block;
-    }
-    .files h3 {
-      color: #fff;
-      margin-bottom: 15px;
-      font-size: 1rem;
-    }
-    .files ul {
-      list-style: none;
-    }
-    .files li {
-      margin: 8px 0;
-    }
-    .files a {
-      background: none;
-      padding: 0;
-      color: #9933FF;
-      font-weight: normal;
-    }
-    .files a:hover {
-      transform: none;
-      box-shadow: none;
-      text-decoration: underline;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeMon - Real-time AI Status Monitor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .container {
+            text-align: center;
+            max-width: 700px;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #ff6b35, #f7931e, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .tagline {
+            font-size: 1.2rem;
+            color: #a0aec0;
+            margin-bottom: 2rem;
+        }
+        .description {
+            color: #cbd5e0;
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: linear-gradient(90deg, #ff6b35, #f7931e);
+            color: #fff;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+        }
+        .install-cmd {
+            margin-top: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #68d391;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .install-cmd:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .install-cmd::before {
+            content: '$ ';
+            color: #a0aec0;
+        }
+        .characters {
+            margin-top: 3rem;
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .character {
+            text-align: center;
+        }
+        .character img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            transition: transform 0.3s ease;
+        }
+        .character img:hover {
+            transform: scale(1.1);
+        }
+        .character-name {
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+        .character-platform {
+            font-size: 0.75rem;
+            color: #4a5568;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>VibeMon Static Server</h1>
-    <p>Static files for VibeMon - AI Assistant Status Monitor</p>
+    <div class="container">
+        <h1>VibeMon</h1>
+        <p class="tagline">Real-time AI Status Monitor</p>
+        <p class="description">
+            Display your AI coding assistant's state on ESP32 devices, Desktop App, or cloud service.
+            See when Claude, Kiro, or OpenClaw is thinking, working, or done.
+        </p>
 
-    <div class="links">
-      <a href="demo.html">Live Demo</a>
-      <a href="https://github.com/nalbam/vibe-monitor" target="_blank">GitHub</a>
-    </div>
+        <a href="https://vibemon.io" class="btn">
+            Go to VibeMon.io
+        </a>
 
-    <div class="files">
-      <h3>Files</h3>
-      <ul>
-        <li><a href="js/vibemon-engine-standalone.js">js/vibemon-engine-standalone.js</a></li>
-        <li><a href="characters/clawd.png">characters/clawd.png</a></li>
-        <li><a href="characters/kiro.png">characters/kiro.png</a></li>
-        <li><a href="characters/claw.png">characters/claw.png</a></li>
-      </ul>
+        <div class="install-cmd" onclick="navigator.clipboard.writeText('curl -fsSL https://docs.vibemon.io/install.py | python3')">
+            curl -fsSL https://docs.vibemon.io/install.py | python3
+        </div>
+
+        <div class="characters">
+            <div class="character">
+                <img src="https://static.vibemon.io/characters/clawd.png" alt="Clawd">
+                <div class="character-name">Clawd</div>
+                <div class="character-platform">Claude Code</div>
+            </div>
+            <div class="character">
+                <img src="https://static.vibemon.io/characters/kiro.png" alt="Kiro">
+                <div class="character-name">Kiro</div>
+                <div class="character-platform">Kiro IDE</div>
+            </div>
+            <div class="character">
+                <img src="https://static.vibemon.io/characters/claw.png" alt="Claw">
+                <div class="character-name">Claw</div>
+                <div class="character-platform">OpenClaw</div>
+            </div>
+        </div>
     </div>
-  </div>
 </body>
 </html>
