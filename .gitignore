@@ -12,3 +12,7 @@
 prompt-*.md
 prompt.md
 docs/plans/
+
+# pytest
+__pycache__
+.pytest_cache
