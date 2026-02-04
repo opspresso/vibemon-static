@@ -177,7 +177,7 @@ const STATES = {
 };
 
 const CHARACTER_CONFIG = {
-  apto: { name: "apto", displayName: "Apto", color: "#8B8BA0", eyes: { left: { x: 22, y: 22 }, right: { x: 37, y: 22 }, size: 6 }, effect: { x: 46, y: 6 } },
+  apto: { name: "apto", displayName: "Apto", color: "#797C98", eyes: { left: { x: 22, y: 22 }, right: { x: 37, y: 22 }, size: 6 }, effect: { x: 46, y: 6 } },
   clawd: { name: "clawd", displayName: "Clawd", color: "#D97757", eyes: { left: { x: 14, y: 22 }, right: { x: 44, y: 22 }, size: 6 }, effect: { x: 52, y: 4 } },
   kiro: { name: "kiro", displayName: "Kiro", color: "#FFFFFF", eyes: { left: { x: 30, y: 21 }, right: { x: 39, y: 21 }, w: 5, h: 8 }, effect: { x: 50, y: 3 } },
   claw: { name: "claw", displayName: "Claw", color: "#DD4444", eyes: { left: { x: 21, y: 16 }, right: { x: 38, y: 16 }, size: 6 }, effect: { x: 49, y: 4 } }
