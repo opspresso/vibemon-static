@@ -14,7 +14,7 @@ The `docs` folder contains:
 - `app.js` - JavaScript application
 - `logo.png` - Sample image file
 - `js/vibemon-engine-standalone.js` - VibeMon rendering engine
-- `characters/` - Character images (clawd.png, kiro.png, claw.png)
+- `characters/` - Character images (apto.png, clawd.png, kiro.png, claw.png)
 
 ## VibeMon Engine
 
@@ -29,6 +29,7 @@ const container = document.getElementById('vibemon-display');
 const engine = createVibeMonEngine(container, {
   useEmoji: true,
   characterImageUrls: {
+    apto: 'https://static.vibemon.io/characters/apto.png',
     clawd: 'https://static.vibemon.io/characters/clawd.png',
     kiro: 'https://static.vibemon.io/characters/kiro.png',
     claw: 'https://static.vibemon.io/characters/claw.png'
@@ -58,6 +59,7 @@ engine.startAnimation();
 
 ### Characters
 
+- `apto` - Gray-purple (Apto)
 - `clawd` - Orange (Claude Code)
 - `kiro` - White ghost (Kiro)
 - `claw` - Red (OpenClaw)
@@ -80,6 +82,7 @@ vibemon-static/
 │   ├── js/
 │   │   └── vibemon-engine-standalone.js
 │   └── characters/
+│       ├── apto.png
 │       ├── clawd.png
 │       ├── kiro.png
 │       └── claw.png
