@@ -375,15 +375,15 @@ function drawHappyEyes(char, drawRect) {
   const leftCX = leftLensX + Math.floor(lensW / 2);
   const rightCX = rightLensX + Math.floor(lensW / 2);
 
-  // Left eye ^
+  // Left eye >
   drawRect(leftCX - 2, centerY - 2, 2, 2, CONSTANTS.COLOR_EYE);
   drawRect(leftCX, centerY, 2, 2, CONSTANTS.COLOR_EYE);
   drawRect(leftCX - 2, centerY + 2, 2, 2, CONSTANTS.COLOR_EYE);
 
-  // Right eye ^
-  drawRect(rightCX + 1, centerY - 2, 2, 2, CONSTANTS.COLOR_EYE);
-  drawRect(rightCX - 1, centerY, 2, 2, CONSTANTS.COLOR_EYE);
-  drawRect(rightCX + 1, centerY + 2, 2, 2, CONSTANTS.COLOR_EYE);
+  // Right eye <
+  drawRect(rightCX, centerY - 2, 2, 2, CONSTANTS.COLOR_EYE);
+  drawRect(rightCX - 2, centerY, 2, 2, CONSTANTS.COLOR_EYE);
+  drawRect(rightCX, centerY + 2, 2, 2, CONSTANTS.COLOR_EYE);
 }
 
 function drawEyeType(eyeType, char, drawRect) {
