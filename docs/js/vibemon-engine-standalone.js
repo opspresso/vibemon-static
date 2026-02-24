@@ -259,7 +259,7 @@ function getFloatOffset(animFrame) {
 }
 
 function needsAnimationRedraw(state, blinkFrame) {
-  if (['start', 'thinking', 'planning', 'working', 'packing', 'sleep'].includes(state)) return true;
+  if (['start', 'thinking', 'planning', 'working', 'packing', 'sleep', 'error'].includes(state)) return true;
   if (state === 'idle') return blinkFrame === CONSTANTS.BLINK_START_FRAME || blinkFrame === CONSTANTS.BLINK_END_FRAME;
   return false;
 }
