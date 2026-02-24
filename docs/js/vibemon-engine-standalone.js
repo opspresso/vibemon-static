@@ -171,10 +171,10 @@ const STATES = {
   planning: { bgColor: "#008888", text: "Planning", eyeType: "normal", effect: "thinking", showLoading: true, textColor: "#FFFFFF" },
   working: { bgColor: "#0066CC", text: "Working", eyeType: "focused", effect: "sparkle", showLoading: true, textColor: "#FFFFFF" },
   packing: { bgColor: "#AAAAAA", text: "Packing", eyeType: "normal", effect: "thinking", showLoading: true, textColor: "#000000" },
-  notification: { bgColor: "#FFCC00", text: "Input?", eyeType: "normal", effect: "alert", showLoading: false, textColor: "#000000" },
+  notification: { bgColor: "#FFCC00", text: "Input?", eyeType: "normal", effect: "question", showLoading: false, textColor: "#000000" },
   sleep: { bgColor: "#111144", text: "Zzz...", eyeType: "blink", effect: "zzz", showLoading: false, textColor: "#FFFFFF" },
   done: { bgColor: "#00AA00", text: "Done!", eyeType: "happy", effect: "none", showLoading: false, textColor: "#FFFFFF" },
-  error: { bgColor: "#DD0000", text: "Error", eyeType: "normal", effect: "exclamation", showLoading: false, textColor: "#FFFFFF" }
+  alert: { bgColor: "#DD0000", text: "Alert", eyeType: "normal", effect: "exclamation", showLoading: false, textColor: "#FFFFFF" }
 };
 
 const CHARACTER_CONFIG = {
@@ -259,7 +259,7 @@ function getFloatOffset(animFrame) {
 }
 
 function needsAnimationRedraw(state, blinkFrame) {
-  if (['start', 'thinking', 'planning', 'working', 'packing', 'sleep', 'error'].includes(state)) return true;
+  if (['start', 'thinking', 'planning', 'working', 'packing', 'sleep', 'alert'].includes(state)) return true;
   if (state === 'idle') return blinkFrame === CONSTANTS.BLINK_START_FRAME || blinkFrame === CONSTANTS.BLINK_END_FRAME;
   return false;
 }
@@ -422,7 +422,7 @@ function drawEffect(effect, char, animFrame, drawRect) {
       drawRect(effectX + 4, effectY - 1, 4, 2, effectColor);
       drawRect(effectX + 3, effectY + 1, 6, 2, effectColor);
     }
-  } else if (effect === 'alert') {
+  } else if (effect === 'question') {
     const color = '#000000';
     drawRect(effectX + 1, effectY, 4, 2, color);
     drawRect(effectX + 4, effectY + 2, 2, 2, color);
