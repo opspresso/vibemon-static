@@ -84,6 +84,7 @@ body {
 .state-btn.session { background: #00CCCC; color: white; }
 .state-btn.done { background: #00AA00; color: white; }
 .state-btn.sleep { background: #1a1a4e; color: white; }
+.state-btn.error { background: #DD0000; color: white; }
 
 .state-icon {
   font-size: 18px;
