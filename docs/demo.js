@@ -3,6 +3,9 @@ import { CHARACTER_CONFIG, CHARACTER_NAMES, DEFAULT_CHARACTER, states, createVib
 // VibeMon engine instance
 let vibeMonEngine = null;
 
+// Cached DOM references (populated during init)
+const domRefs = {};
+
 // Current state
 let currentState = 'start';
 let currentCharacter = 'clawd';
@@ -67,11 +70,12 @@ async function init() {
     characterSelect.appendChild(option);
   });
 
-  // Get input elements
-  const projectInput = document.getElementById('project-input');
-  const toolInput = document.getElementById('tool-input');
-  const modelInput = document.getElementById('model-input');
-  const memoryInput = document.getElementById('memory-input');
+  // Cache input element references
+  domRefs.projectInput = document.getElementById('project-input');
+  domRefs.toolInput = document.getElementById('tool-input');
+  domRefs.modelInput = document.getElementById('model-input');
+  domRefs.memoryInput = document.getElementById('memory-input');
+  const { projectInput, toolInput, modelInput, memoryInput } = domRefs;
 
   // Project: use URL param or default
   if (urlParams.project) {
@@ -136,10 +140,7 @@ window.updateMemorySlider = function(value) {
 
 // Update display
 window.updateDisplay = function() {
-  const projectInput = document.getElementById('project-input');
-  const toolInput = document.getElementById('tool-input');
-  const modelInput = document.getElementById('model-input');
-  const memoryInput = document.getElementById('memory-input');
+  const { projectInput, toolInput, modelInput, memoryInput } = domRefs;
 
   // Get values from inputs
   const projectName = projectInput.value.trim();
@@ -176,4 +177,4 @@ window.updateDisplay = function() {
 };
 
 // Initialize on load
-window.onload = init;
+window.addEventListener('DOMContentLoaded', init);

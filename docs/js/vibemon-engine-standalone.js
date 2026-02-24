@@ -651,7 +651,7 @@ export class VibeMonEngine {
     if (data.project !== undefined) this.currentProject = data.project || '-';
     if (data.tool !== undefined) this.currentTool = data.tool || '-';
     if (data.model !== undefined) this.currentModel = data.model || '-';
-    if (data.memory !== undefined) this.currentMemory = data.memory || 0;
+    if (data.memory !== undefined) this.currentMemory = Math.min(100, Math.max(0, data.memory || 0));
 
     if (this.currentState === 'idle' && prevState !== 'idle') {
       this.blinkFrame = 0;
@@ -673,8 +673,9 @@ export class VibeMonEngine {
     this._renderBackground();
     this._renderStatusText();
     this._renderLoadingDots();
-    this._renderInfoLines();
-    this._renderMemoryBar();
+    const showMemory = this.currentState !== 'start' && this.currentMemory > 0;
+    this._renderInfoLines(showMemory);
+    this._renderMemoryBar(showMemory);
     this._renderIcons();
     this._renderCharacter();
   }
@@ -708,7 +709,7 @@ export class VibeMonEngine {
     this.dom.dots.forEach((dot, i) => dot.classList.toggle('dim', i !== activeIndex));
   }
 
-  _renderInfoLines() {
+  _renderInfoLines(showMemory) {
     const state = STATES[this.currentState] || STATES.idle;
 
     if (this.dom.toolLine) {
@@ -726,7 +727,6 @@ export class VibeMonEngine {
     if (this.dom.projectLine) this.dom.projectLine.style.display = showProject ? 'block' : 'none';
     if (this.dom.modelLine) this.dom.modelLine.style.display = this.currentModel && this.currentModel !== '-' ? 'block' : 'none';
 
-    const showMemory = this.currentState !== 'start' && this.currentMemory > 0;
     if (this.dom.memoryLine) this.dom.memoryLine.style.display = showMemory ? 'block' : 'none';
 
     const textColor = state.textColor;
@@ -735,9 +735,8 @@ export class VibeMonEngine {
     this.dom.infoValues?.forEach(el => el.style.color = textColor);
   }
 
-  _renderMemoryBar() {
+  _renderMemoryBar(showMemory) {
     const state = STATES[this.currentState] || STATES.idle;
-    const showMemory = this.currentState !== 'start' && this.currentMemory > 0;
     updateMemoryBar(showMemory ? this.currentMemory : null, state.bgColor, this.dom);
   }
 

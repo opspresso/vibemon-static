@@ -63,7 +63,7 @@ engine.startAnimation();
 | `notification` | Yellow | User input needed |
 | `done` | Green | Tool completed |
 | `sleep` | Navy | 5min inactivity |
-| `error` | Red | Error occurred |
+| `alert` | Red | Error occurred |
 
 ### Characters
 
