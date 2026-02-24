@@ -174,7 +174,7 @@ const STATES = {
   notification: { bgColor: "#FFCC00", text: "Input?", eyeType: "normal", effect: "alert", showLoading: false, textColor: "#000000" },
   sleep: { bgColor: "#111144", text: "Zzz...", eyeType: "blink", effect: "zzz", showLoading: false, textColor: "#FFFFFF" },
   done: { bgColor: "#00AA00", text: "Done!", eyeType: "happy", effect: "none", showLoading: false, textColor: "#FFFFFF" },
-  error: { bgColor: "#DD0000", text: "Error", eyeType: "normal", effect: "exclamation", showLoading: true, textColor: "#FFFFFF" }
+  error: { bgColor: "#DD0000", text: "Error", eyeType: "normal", effect: "exclamation", showLoading: false, textColor: "#FFFFFF" }
 };
 
 const CHARACTER_CONFIG = {
