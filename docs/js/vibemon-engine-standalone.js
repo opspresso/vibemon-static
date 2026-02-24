@@ -173,7 +173,8 @@ const STATES = {
   packing: { bgColor: "#AAAAAA", text: "Packing", eyeType: "normal", effect: "thinking", showLoading: true, textColor: "#000000" },
   notification: { bgColor: "#FFCC00", text: "Input?", eyeType: "normal", effect: "alert", showLoading: false, textColor: "#000000" },
   sleep: { bgColor: "#111144", text: "Zzz...", eyeType: "blink", effect: "zzz", showLoading: false, textColor: "#FFFFFF" },
-  done: { bgColor: "#00AA00", text: "Done!", eyeType: "happy", effect: "none", showLoading: false, textColor: "#FFFFFF" }
+  done: { bgColor: "#00AA00", text: "Done!", eyeType: "happy", effect: "none", showLoading: false, textColor: "#FFFFFF" },
+  error: { bgColor: "#DD0000", text: "Error", eyeType: "normal", effect: "exclamation", showLoading: true, textColor: "#FFFFFF" }
 };
 
 const CHARACTER_CONFIG = {
@@ -437,6 +438,28 @@ function drawEffect(effect, char, animFrame, drawRect) {
       drawRect(effectX + 1, effectY + 4, 2, 1, effectColor);
       drawRect(effectX, effectY + 5, 6, 1, effectColor);
     }
+  } else if (effect === 'exclamation') {
+    // Draw exclamation mark (white with red border)
+    const shakeOffset = (Math.floor(animFrame / 2) % 4 < 2) ? 2 : -2;
+    const markY = effectY + shakeOffset;
+
+    // Exclamation body (white rectangle)
+    drawRect(effectX + 1, markY, 4, 10, CONSTANTS.COLOR_WHITE);
+
+    // Red border around body
+    drawRect(effectX, markY - 1, 6, 1, '#DD0000');
+    drawRect(effectX, markY + 10, 6, 1, '#DD0000');
+    drawRect(effectX, markY, 1, 10, '#DD0000');
+    drawRect(effectX + 5, markY, 1, 10, '#DD0000');
+
+    // Exclamation dot (white square)
+    drawRect(effectX + 1, markY + 12, 4, 2, CONSTANTS.COLOR_WHITE);
+
+    // Red border around dot
+    drawRect(effectX, markY + 11, 6, 1, '#DD0000');
+    drawRect(effectX, markY + 14, 6, 1, '#DD0000');
+    drawRect(effectX, markY + 12, 1, 2, '#DD0000');
+    drawRect(effectX + 5, markY + 12, 1, 2, '#DD0000');
   }
 }
 
