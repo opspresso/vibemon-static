@@ -9,10 +9,10 @@ This repository contains static web assets for VibeMon - a real-time status moni
 ## Files
 
 The `docs` folder contains:
-- `index.html` - Main HTML page
-- `style.css` - Stylesheet
-- `app.js` - JavaScript application
-- `logo.png` - Sample image file
+- `index.html` - Landing page
+- `demo.html` - Live simulator
+- `demo.css` - Demo styles
+- `demo.js` - Demo controller
 - `js/vibemon-engine-standalone.js` - VibeMon rendering engine
 - `characters/` - Character images (apto.png, clawd.png, kiro.png, claw.png)
 
@@ -37,7 +37,14 @@ const engine = createVibeMonEngine(container, {
 });
 
 await engine.init();
-engine.setState({ state: 'working', tool: 'Bash', project: 'my-project' });
+engine.setState({
+  state: 'working',
+  character: 'clawd',
+  tool: 'Bash',
+  project: 'my-project',
+  model: 'Opus 4.5',
+  memory: 45
+});
 engine.render();
 engine.startAnimation();
 </script>
@@ -56,6 +63,7 @@ engine.startAnimation();
 | `notification` | Yellow | User input needed |
 | `done` | Green | Tool completed |
 | `sleep` | Navy | 5min inactivity |
+| `error` | Red | Error occurred |
 
 ### Characters
 
