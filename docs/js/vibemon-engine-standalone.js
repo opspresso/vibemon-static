@@ -32,8 +32,8 @@ const CONSTANTS = {
   BLINK_END_FRAME: 31,
   PROJECT_NAME_MAX_LENGTH: 20,
   PROJECT_NAME_TRUNCATE_AT: 17,
-  MODEL_NAME_MAX_LENGTH: 14,
-  MODEL_NAME_TRUNCATE_AT: 11
+  MODEL_NAME_MAX_LENGTH: 20,
+  MODEL_NAME_TRUNCATE_AT: 17
 };
 
 // =============================================================================
