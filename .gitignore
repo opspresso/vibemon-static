@@ -11,7 +11,6 @@
 .prompt.md
 prompt-*.md
 prompt.md
-docs/plans/
 
 # pytest
 __pycache__
