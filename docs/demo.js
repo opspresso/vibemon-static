@@ -33,8 +33,8 @@ async function init() {
   vibeMonEngine = createVibeMonEngine(container, {
     useEmoji: iconType === 'emoji',
     characterImageUrls: {
-      apto: './characters/apto.png',
       clawd: './characters/clawd.png',
+      codex: './characters/codex.png',
       kiro: './characters/kiro.png',
       claw: './characters/claw.png'
     }

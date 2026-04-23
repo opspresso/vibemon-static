@@ -4,7 +4,7 @@ Static files (JS, PNG, etc.) served via GitHub Pages from the `docs` folder.
 
 ## About
 
-This repository contains static web assets for VibeMon - a real-time status monitor for AI assistants (Claude Code, Kiro, OpenClaw) with pixel art characters.
+This repository contains static web assets for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters.
 
 ## Files
 
@@ -14,7 +14,7 @@ The `docs` folder contains:
 - `demo.css` - Demo styles
 - `demo.js` - Demo controller
 - `js/vibemon-engine-standalone.js` - VibeMon rendering engine
-- `characters/` - Character images (apto.png, clawd.png, kiro.png, claw.png)
+- `characters/` - Character images (clawd.png, codex.png, kiro.png, claw.png)
 
 ## VibeMon Engine
 
@@ -29,8 +29,8 @@ const container = document.getElementById('vibemon-display');
 const engine = createVibeMonEngine(container, {
   useEmoji: true,
   characterImageUrls: {
-    apto: 'https://static.vibemon.io/characters/apto.png',
     clawd: 'https://static.vibemon.io/characters/clawd.png',
+    codex: 'https://static.vibemon.io/characters/codex.png',
     kiro: 'https://static.vibemon.io/characters/kiro.png',
     claw: 'https://static.vibemon.io/characters/claw.png'
   }
@@ -67,8 +67,8 @@ engine.startAnimation();
 
 ### Characters
 
-- `apto` - Gray-purple (Apto)
 - `clawd` - Orange (Claude Code)
+- `codex` - Green terminal robot (Codex)
 - `kiro` - White ghost (Kiro)
 - `claw` - Red (OpenClaw)
 
@@ -90,8 +90,8 @@ vibemon-static/
 │   ├── js/
 │   │   └── vibemon-engine-standalone.js
 │   └── characters/
-│       ├── apto.png
 │       ├── clawd.png
+│       ├── codex.png
 │       ├── kiro.png
 │       └── claw.png
 └── README.md
