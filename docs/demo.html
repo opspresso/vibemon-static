@@ -101,6 +101,14 @@
         <label class="input-label">Memory Usage: <span id="memory-display">45%</span></label>
         <input type="range" class="input-slider" id="memory-input" min="0" max="100" value="45" oninput="updateMemorySlider(this.value)">
       </div>
+      <div class="input-group">
+        <label class="input-label">5h Usage: <span id="usage5h-display">45%</span></label>
+        <input type="range" class="input-slider" id="usage5h-input" min="0" max="100" value="45" oninput="updateUsage5hSlider(this.value)">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Weekly Usage: <span id="usage-week-display">45%</span></label>
+        <input type="range" class="input-slider" id="usage-week-input" min="0" max="100" value="45" oninput="updateUsageWeekSlider(this.value)">
+      </div>
 
       <!-- JSON Preview -->
       <div class="json-preview">

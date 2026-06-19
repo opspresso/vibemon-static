@@ -21,8 +21,15 @@ function getUrlParams() {
     tool: params.get('tool'),
     model: params.get('model'),
     memory: params.get('memory'),
+    usage5h: params.get('usage5h'),
+    usageWeek: params.get('usageWeek'),
     icon: params.get('icon')
   };
+}
+
+function parsePercent(value, fallback) {
+  const parsed = parseInt(value, 10);
+  return isNaN(parsed) ? fallback : Math.max(0, Math.min(100, parsed));
 }
 
 // Initialize
@@ -75,7 +82,9 @@ async function init() {
   domRefs.toolInput = document.getElementById('tool-input');
   domRefs.modelInput = document.getElementById('model-input');
   domRefs.memoryInput = document.getElementById('memory-input');
-  const { projectInput, toolInput, modelInput, memoryInput } = domRefs;
+  domRefs.usage5hInput = document.getElementById('usage5h-input');
+  domRefs.usageWeekInput = document.getElementById('usage-week-input');
+  const { projectInput, toolInput, modelInput, memoryInput, usage5hInput, usageWeekInput } = domRefs;
 
   // Project: use URL param or default
   if (urlParams.project) {
@@ -93,15 +102,17 @@ async function init() {
   }
 
   // Memory: use URL param (0-100) or random (10-90%)
-  let memoryValue;
-  if (urlParams.memory !== null) {
-    const parsed = parseInt(urlParams.memory, 10);
-    memoryValue = isNaN(parsed) ? 45 : Math.max(0, Math.min(100, parsed));
-  } else {
-    memoryValue = Math.floor(Math.random() * 81) + 10;
-  }
+  const memoryValue = urlParams.memory !== null ? parsePercent(urlParams.memory, 45) : Math.floor(Math.random() * 81) + 10;
   memoryInput.value = memoryValue;
   document.getElementById('memory-display').textContent = memoryValue + '%';
+
+  // Usage: use URL params (0-100) or demo defaults
+  const usage5hValue = urlParams.usage5h !== null ? parsePercent(urlParams.usage5h, 45) : 62;
+  const usageWeekValue = urlParams.usageWeek !== null ? parsePercent(urlParams.usageWeek, 45) : 78;
+  usage5hInput.value = usage5hValue;
+  usageWeekInput.value = usageWeekValue;
+  document.getElementById('usage5h-display').textContent = usage5hValue + '%';
+  document.getElementById('usage-week-display').textContent = usageWeekValue + '%';
 
   // Icon type: use URL param or default
   if (urlParams.icon === 'pixel' || urlParams.icon === 'emoji') {
@@ -138,15 +149,27 @@ window.updateMemorySlider = function(value) {
   updateDisplay();
 };
 
+window.updateUsage5hSlider = function(value) {
+  document.getElementById('usage5h-display').textContent = value + '%';
+  updateDisplay();
+};
+
+window.updateUsageWeekSlider = function(value) {
+  document.getElementById('usage-week-display').textContent = value + '%';
+  updateDisplay();
+};
+
 // Update display
 window.updateDisplay = function() {
-  const { projectInput, toolInput, modelInput, memoryInput } = domRefs;
+  const { projectInput, toolInput, modelInput, memoryInput, usage5hInput, usageWeekInput } = domRefs;
 
   // Get values from inputs
   const projectName = projectInput.value.trim();
   const toolName = toolInput.value;
   const modelName = modelInput.value.trim();
   const memoryValue = parseInt(memoryInput.value, 10) || 0;
+  const usage5hValue = parseInt(usage5hInput.value, 10) || 0;
+  const usageWeekValue = parseInt(usageWeekInput.value, 10) || 0;
 
   // Update VibeMon engine state
   vibeMonEngine.setState({
@@ -155,7 +178,9 @@ window.updateDisplay = function() {
     project: projectName,
     tool: toolName,
     model: modelName,
-    memory: memoryValue
+    memory: memoryValue,
+    usage5h: usage5hValue,
+    usageWeek: usageWeekValue
   });
 
   // Render using VibeMon engine
@@ -171,6 +196,8 @@ window.updateDisplay = function() {
     project: projectName,
     model: modelName,
     memory: memoryValue,
+    usage5h: usage5hValue,
+    usageWeek: usageWeekValue,
     character: currentCharacter
   };
   document.getElementById('json-preview').textContent = JSON.stringify(json, null, 2);

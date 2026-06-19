@@ -105,22 +105,36 @@ const ENGINE_STYLES = `
 .vibemon-display .vibemon-tool-text { top: 235px; }
 .vibemon-display .vibemon-model-text { top: 250px; }
 .vibemon-display .vibemon-memory-text { top: 265px; }
+.vibemon-display .vibemon-usage5h-text { top: 280px; }
+.vibemon-display .vibemon-usageweek-text { top: 295px; }
 
-.vibemon-display .vibemon-memory-bar-container {
-  position: absolute;
-  top: 285px;
-  left: 10px;
-  width: 152px;
+/* Single-line metric row: [icon] [NN%] [inline bar] */
+.vibemon-display .vibemon-metric {
+  display: flex;
+  align-items: center;
+  right: 10px;
+}
+
+.vibemon-display .vibemon-metric-value {
+  width: 34px;
+  flex: none;
+  text-align: right;
+}
+
+.vibemon-display .vibemon-metric-bar-container {
+  flex: 1;
   height: 8px;
+  margin-left: 4px;
   background: rgba(0, 0, 0, 0.4);
   border-radius: 2px;
   border: 1px solid rgba(0, 0, 0, 0.6);
   box-sizing: border-box;
+  overflow: hidden;
 }
 
-.vibemon-display .vibemon-memory-bar {
+.vibemon-display .vibemon-metric-bar {
+  display: block;
   height: 100%;
-  border-radius: 0px;
   transition: width 0.3s, background 0.3s;
 }
 
@@ -230,23 +244,16 @@ function getMemoryGradient(percent) {
   return `linear-gradient(to right, ${startColor}, ${endColor})`;
 }
 
-function updateMemoryBar(memoryUsage, bgColor, elements) {
-  const { memoryBar, memoryBarContainer } = elements;
-  if (!memoryBar || !memoryBarContainer) return;
+function updateMetricBar(value, bgColor, bar, container) {
+  if (!bar || !container) return;
 
-  if (!memoryUsage || memoryUsage <= 0) {
-    memoryBarContainer.style.display = 'none';
-    return;
-  }
-
-  memoryBarContainer.style.display = 'block';
   const isDarkBg = DARK_BG_COLORS.includes(bgColor);
-  memoryBarContainer.style.borderColor = isDarkBg ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
-  memoryBarContainer.style.background = isDarkBg ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.3)';
+  container.style.borderColor = isDarkBg ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)';
+  container.style.background = isDarkBg ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.3)';
 
-  const clamped = Math.min(100, Math.max(0, memoryUsage));
-  memoryBar.style.width = clamped + '%';
-  memoryBar.style.background = getMemoryGradient(clamped);
+  const clamped = Math.min(100, Math.max(0, value));
+  bar.style.width = clamped + '%';
+  bar.style.background = getMemoryGradient(clamped);
 }
 
 // =============================================================================
@@ -308,7 +315,40 @@ function drawBrainIcon(ctx, color) {
   ctx.fillRect(5, 0, 1, 1);
 }
 
-const ICON_DRAW_FUNCS = [drawFolderIcon, drawToolIcon, drawRobotIcon, drawBrainIcon];
+// Clock icon (5-hour usage window)
+function drawClockIcon(ctx, color) {
+  ctx.fillStyle = color;
+  // Round-ish ring
+  ctx.fillRect(2, 0, 4, 1);
+  ctx.fillRect(2, 7, 4, 1);
+  ctx.fillRect(0, 2, 1, 4);
+  ctx.fillRect(7, 2, 1, 4);
+  ctx.fillRect(1, 1, 1, 1);
+  ctx.fillRect(6, 1, 1, 1);
+  ctx.fillRect(1, 6, 1, 1);
+  ctx.fillRect(6, 6, 1, 1);
+  // Hands (hour up, minute right)
+  ctx.fillRect(3, 2, 1, 2);
+  ctx.fillRect(4, 4, 2, 1);
+}
+
+// Calendar icon (weekly usage window)
+function drawCalendarIcon(ctx, color) {
+  ctx.fillStyle = color;
+  // Binding tabs
+  ctx.fillRect(2, 0, 1, 2);
+  ctx.fillRect(5, 0, 1, 2);
+  // Body
+  ctx.fillRect(0, 1, 8, 7);
+  // Header separator + day cells
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(1, 3, 6, 1);
+  ctx.fillRect(2, 5, 1, 1);
+  ctx.fillRect(4, 5, 1, 1);
+  ctx.fillRect(6, 5, 1, 1);
+}
+
+const ICON_DRAW_FUNCS = [drawFolderIcon, drawToolIcon, drawRobotIcon, drawBrainIcon, drawClockIcon, drawCalendarIcon];
 
 // =============================================================================
 // CHARACTER AND EFFECTS RENDERING
@@ -539,12 +579,20 @@ const DISPLAY_HTML = `
   <span class="vibemon-info-label"><span class="vibemon-emoji-icon">🤖 </span><canvas class="vibemon-pixel-icon vibemon-icon-model" width="8" height="8"></canvas></span>
   <span class="vibemon-info-value vibemon-model-value">-</span>
 </div>
-<div class="vibemon-info-text vibemon-memory-text">
+<div class="vibemon-info-text vibemon-metric vibemon-memory-text">
   <span class="vibemon-info-label"><span class="vibemon-emoji-icon">🧠 </span><canvas class="vibemon-pixel-icon vibemon-icon-memory" width="8" height="8"></canvas></span>
-  <span class="vibemon-info-value vibemon-memory-value">-</span>
+  <span class="vibemon-info-value vibemon-metric-value vibemon-memory-value">-</span>
+  <span class="vibemon-metric-bar-container vibemon-memory-bar-container"><span class="vibemon-metric-bar vibemon-memory-bar"></span></span>
 </div>
-<div class="vibemon-memory-bar-container">
-  <div class="vibemon-memory-bar"></div>
+<div class="vibemon-info-text vibemon-metric vibemon-usage5h-text">
+  <span class="vibemon-info-label"><span class="vibemon-emoji-icon">⏱️ </span><canvas class="vibemon-pixel-icon vibemon-icon-usage5h" width="8" height="8"></canvas></span>
+  <span class="vibemon-info-value vibemon-metric-value vibemon-usage5h-value">-</span>
+  <span class="vibemon-metric-bar-container vibemon-usage5h-bar-container"><span class="vibemon-metric-bar vibemon-usage5h-bar"></span></span>
+</div>
+<div class="vibemon-info-text vibemon-metric vibemon-usageweek-text">
+  <span class="vibemon-info-label"><span class="vibemon-emoji-icon">📅 </span><canvas class="vibemon-pixel-icon vibemon-icon-usageweek" width="8" height="8"></canvas></span>
+  <span class="vibemon-info-value vibemon-metric-value vibemon-usageweek-value">-</span>
+  <span class="vibemon-metric-bar-container vibemon-usageweek-bar-container"><span class="vibemon-metric-bar vibemon-usageweek-bar"></span></span>
 </div>
 `;
 
@@ -574,6 +622,8 @@ export class VibeMonEngine {
     this.currentTool = '-';
     this.currentModel = '-';
     this.currentMemory = 0;
+    this.currentUsage5h = 0;
+    this.currentUsageWeek = 0;
 
     this.animFrame = 0;
     this.blinkFrame = 0;
@@ -599,9 +649,11 @@ export class VibeMonEngine {
     const iconTool = q('.vibemon-icon-tool');
     const iconModel = q('.vibemon-icon-model');
     const iconMemory = q('.vibemon-icon-memory');
+    const iconUsage5h = q('.vibemon-icon-usage5h');
+    const iconUsageweek = q('.vibemon-icon-usageweek');
 
-    // Cache icon contexts for performance
-    this.iconContexts = [iconProject, iconTool, iconModel, iconMemory].map(el => el?.getContext('2d'));
+    // Cache icon contexts for performance (order must match ICON_DRAW_FUNCS)
+    this.iconContexts = [iconProject, iconTool, iconModel, iconMemory, iconUsage5h, iconUsageweek].map(el => el?.getContext('2d'));
 
     this.dom = {
       display: this.container,
@@ -611,12 +663,20 @@ export class VibeMonEngine {
       toolLine: q('.vibemon-tool-text'),
       modelLine: q('.vibemon-model-text'),
       memoryLine: q('.vibemon-memory-text'),
+      usage5hLine: q('.vibemon-usage5h-text'),
+      usageweekLine: q('.vibemon-usageweek-text'),
       projectValue: q('.vibemon-project-value'),
       toolValue: q('.vibemon-tool-value'),
       modelValue: q('.vibemon-model-value'),
       memoryValue: q('.vibemon-memory-value'),
+      usage5hValue: q('.vibemon-usage5h-value'),
+      usageweekValue: q('.vibemon-usageweek-value'),
       memoryBar: q('.vibemon-memory-bar'),
       memoryBarContainer: q('.vibemon-memory-bar-container'),
+      usage5hBar: q('.vibemon-usage5h-bar'),
+      usage5hBarContainer: q('.vibemon-usage5h-bar-container'),
+      usageweekBar: q('.vibemon-usageweek-bar'),
+      usageweekBarContainer: q('.vibemon-usageweek-bar-container'),
       infoTexts: qa('.vibemon-info-text'),
       infoLabels: qa('.vibemon-info-label'),
       infoValues: qa('.vibemon-info-value'),
@@ -652,6 +712,8 @@ export class VibeMonEngine {
     if (data.tool !== undefined) this.currentTool = data.tool || '-';
     if (data.model !== undefined) this.currentModel = data.model || '-';
     if (data.memory !== undefined) this.currentMemory = Math.min(100, Math.max(0, data.memory || 0));
+    if (data.usage5h !== undefined) this.currentUsage5h = Math.min(100, Math.max(0, data.usage5h || 0));
+    if (data.usageWeek !== undefined) this.currentUsageWeek = Math.min(100, Math.max(0, data.usageWeek || 0));
 
     if (this.currentState === 'idle' && prevState !== 'idle') {
       this.blinkFrame = 0;
@@ -665,7 +727,9 @@ export class VibeMonEngine {
       project: this.currentProject,
       tool: this.currentTool,
       model: this.currentModel,
-      memory: this.currentMemory
+      memory: this.currentMemory,
+      usage5h: this.currentUsage5h,
+      usageWeek: this.currentUsageWeek
     };
   }
 
@@ -673,9 +737,7 @@ export class VibeMonEngine {
     this._renderBackground();
     this._renderStatusText();
     this._renderLoadingDots();
-    const showMemory = this.currentState !== 'start' && this.currentMemory > 0;
-    this._renderInfoLines(showMemory);
-    this._renderMemoryBar(showMemory);
+    this._renderInfoLines();
     this._renderIcons();
     this._renderCharacter();
   }
@@ -709,7 +771,7 @@ export class VibeMonEngine {
     this.dom.dots.forEach((dot, i) => dot.classList.toggle('dim', i !== activeIndex));
   }
 
-  _renderInfoLines(showMemory) {
+  _renderInfoLines() {
     const state = STATES[this.currentState] || STATES.idle;
 
     if (this.dom.toolLine) {
@@ -721,23 +783,30 @@ export class VibeMonEngine {
     if (this.dom.projectValue) this.dom.projectValue.textContent = truncate(this.currentProject, CONSTANTS.PROJECT_NAME_MAX_LENGTH, CONSTANTS.PROJECT_NAME_TRUNCATE_AT);
     if (this.dom.toolValue) this.dom.toolValue.textContent = this.currentTool;
     if (this.dom.modelValue) this.dom.modelValue.textContent = truncate(this.currentModel, CONSTANTS.MODEL_NAME_MAX_LENGTH, CONSTANTS.MODEL_NAME_TRUNCATE_AT);
-    if (this.dom.memoryValue) this.dom.memoryValue.textContent = this.currentMemory > 0 ? this.currentMemory + '%' : '-';
 
     const showProject = this.currentProject && this.currentProject !== '-';
     if (this.dom.projectLine) this.dom.projectLine.style.display = showProject ? 'block' : 'none';
     if (this.dom.modelLine) this.dom.modelLine.style.display = this.currentModel && this.currentModel !== '-' ? 'block' : 'none';
 
-    if (this.dom.memoryLine) this.dom.memoryLine.style.display = showMemory ? 'block' : 'none';
+    // Metric rows (memory + plan usage): single-line [icon] [NN%] [inline bar].
+    // Hidden on the start screen and when the value is 0/unknown.
+    const notStart = this.currentState !== 'start';
+    const metrics = [
+      { value: this.currentMemory, valueEl: this.dom.memoryValue, lineEl: this.dom.memoryLine, bar: this.dom.memoryBar, container: this.dom.memoryBarContainer },
+      { value: this.currentUsage5h, valueEl: this.dom.usage5hValue, lineEl: this.dom.usage5hLine, bar: this.dom.usage5hBar, container: this.dom.usage5hBarContainer },
+      { value: this.currentUsageWeek, valueEl: this.dom.usageweekValue, lineEl: this.dom.usageweekLine, bar: this.dom.usageweekBar, container: this.dom.usageweekBarContainer },
+    ];
+    for (const m of metrics) {
+      const show = notStart && m.value > 0;
+      if (m.valueEl) m.valueEl.textContent = m.value > 0 ? m.value + '%' : '-';
+      if (m.lineEl) m.lineEl.style.display = show ? 'flex' : 'none';
+      if (show) updateMetricBar(m.value, state.bgColor, m.bar, m.container);
+    }
 
     const textColor = state.textColor;
     this.dom.infoTexts?.forEach(el => el.style.color = textColor);
     this.dom.infoLabels?.forEach(el => el.style.color = textColor);
     this.dom.infoValues?.forEach(el => el.style.color = textColor);
-  }
-
-  _renderMemoryBar(showMemory) {
-    const state = STATES[this.currentState] || STATES.idle;
-    updateMemoryBar(showMemory ? this.currentMemory : null, state.bgColor, this.dom);
   }
 
   _renderIcons() {
