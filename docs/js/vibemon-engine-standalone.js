@@ -108,7 +108,7 @@ const ENGINE_STYLES = `
 .vibemon-display .vibemon-usage5h-text { top: 280px; }
 .vibemon-display .vibemon-usageweek-text { top: 295px; }
 
-/* Single-line metric row: [icon] [NN%] [inline bar] */
+/* Single-line metric row: [icon] [inline bar] [NN%] */
 .vibemon-display .vibemon-metric {
   display: flex;
   align-items: center;
@@ -119,6 +119,7 @@ const ENGINE_STYLES = `
   width: 34px;
   flex: none;
   text-align: right;
+  margin-left: 4px;
 }
 
 .vibemon-display .vibemon-metric-bar-container {
@@ -581,18 +582,18 @@ const DISPLAY_HTML = `
 </div>
 <div class="vibemon-info-text vibemon-metric vibemon-memory-text">
   <span class="vibemon-info-label"><span class="vibemon-emoji-icon">🧠 </span><canvas class="vibemon-pixel-icon vibemon-icon-memory" width="8" height="8"></canvas></span>
-  <span class="vibemon-info-value vibemon-metric-value vibemon-memory-value">-</span>
   <span class="vibemon-metric-bar-container vibemon-memory-bar-container"><span class="vibemon-metric-bar vibemon-memory-bar"></span></span>
+  <span class="vibemon-info-value vibemon-metric-value vibemon-memory-value">-</span>
 </div>
 <div class="vibemon-info-text vibemon-metric vibemon-usage5h-text">
   <span class="vibemon-info-label"><span class="vibemon-emoji-icon">⏱️ </span><canvas class="vibemon-pixel-icon vibemon-icon-usage5h" width="8" height="8"></canvas></span>
-  <span class="vibemon-info-value vibemon-metric-value vibemon-usage5h-value">-</span>
   <span class="vibemon-metric-bar-container vibemon-usage5h-bar-container"><span class="vibemon-metric-bar vibemon-usage5h-bar"></span></span>
+  <span class="vibemon-info-value vibemon-metric-value vibemon-usage5h-value">-</span>
 </div>
 <div class="vibemon-info-text vibemon-metric vibemon-usageweek-text">
   <span class="vibemon-info-label"><span class="vibemon-emoji-icon">📅 </span><canvas class="vibemon-pixel-icon vibemon-icon-usageweek" width="8" height="8"></canvas></span>
-  <span class="vibemon-info-value vibemon-metric-value vibemon-usageweek-value">-</span>
   <span class="vibemon-metric-bar-container vibemon-usageweek-bar-container"><span class="vibemon-metric-bar vibemon-usageweek-bar"></span></span>
+  <span class="vibemon-info-value vibemon-metric-value vibemon-usageweek-value">-</span>
 </div>
 `;
 
@@ -788,7 +789,7 @@ export class VibeMonEngine {
     if (this.dom.projectLine) this.dom.projectLine.style.display = showProject ? 'block' : 'none';
     if (this.dom.modelLine) this.dom.modelLine.style.display = this.currentModel && this.currentModel !== '-' ? 'block' : 'none';
 
-    // Metric rows (memory + plan usage): single-line [icon] [NN%] [inline bar].
+    // Metric rows (memory + plan usage): single-line [icon] [inline bar] [NN%].
     // Hidden on the start screen and when the value is 0/unknown.
     const notStart = this.currentState !== 'start';
     const metrics = [
