@@ -72,7 +72,7 @@ engine.startAnimation();
 - `codex` - Green terminal robot (Codex)
 - `kiro` - White ghost (Kiro)
 - `claw` - Red (OpenClaw)
-- `daangni` - White/teal (Daangn Market)
+- `daangni` - White/teal (Daangn)
 
 ## Access
 
