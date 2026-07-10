@@ -184,7 +184,7 @@ const STATES = {
   idle: { bgColor: "#00AA00", text: "Ready", eyeType: "normal", effect: "none", showLoading: false, textColor: "#FFFFFF" },
   thinking: { bgColor: "#9933FF", text: "Thinking", eyeType: "normal", effect: "thinking", showLoading: true, textColor: "#FFFFFF" },
   planning: { bgColor: "#008888", text: "Planning", eyeType: "normal", effect: "thinking", showLoading: true, textColor: "#FFFFFF" },
-  working: { bgColor: "#0066CC", text: "Working", eyeType: "focused", effect: "sparkle", showLoading: true, textColor: "#FFFFFF" },
+  working: { bgColor: "#0066CC", text: "Working", eyeType: "glasses", effect: "sparkle", showLoading: true, textColor: "#FFFFFF" },
   packing: { bgColor: "#AAAAAA", text: "Packing", eyeType: "normal", effect: "thinking", showLoading: true, textColor: "#000000" },
   notification: { bgColor: "#FFCC00", text: "Input?", eyeType: "normal", effect: "question", showLoading: false, textColor: "#000000" },
   sleep: { bgColor: "#111144", text: "Zzz...", eyeType: "blink", effect: "zzz", showLoading: false, textColor: "#FFFFFF" },
@@ -194,7 +194,7 @@ const STATES = {
 
 const CHARACTER_CONFIG = {
   clawd: { name: "clawd", displayName: "Clawd", color: "#D97757", eyes: { left: { x: 14, y: 22 }, right: { x: 44, y: 22 }, size: 6 }, effect: { x: 52, y: 4 } },
-  codex: { name: "codex", displayName: "Codex", color: "#10A37F", eyes: { left: { x: 22, y: 22 }, right: { x: 38, y: 22 }, size: 4 }, effect: { x: 47, y: 3 } },
+  codex: { name: "codex", displayName: "Codex", color: "#10A37F", eyes: { left: { x: 23, y: 22 }, right: { x: 38, y: 22 }, size: 4 }, effect: { x: 47, y: 3 } },
   kiro: { name: "kiro", displayName: "Kiro", color: "#FFFFFF", eyes: { left: { x: 30, y: 21 }, right: { x: 39, y: 21 }, w: 5, h: 8 }, effect: { x: 50, y: 3 } },
   claw: { name: "claw", displayName: "Claw", color: "#DD4444", eyes: { left: { x: 21, y: 16 }, right: { x: 38, y: 16 }, size: 6 }, effect: { x: 49, y: 4 } },
   daangni: { name: "daangni", displayName: "Daangni", color: "#F2CAB2", eyes: { left: { x: 20, y: 35 }, right: { x: 37, y: 35 }, size: 6 }, effect: { x: 47, y: 3 } }
@@ -397,6 +397,24 @@ function drawSunglasses(char, drawRect) {
   drawRect(leftLensX + lensW, bridgeY, rightLensX - leftLensX - lensW, 1, COLOR_SUNGLASSES_FRAME);
 }
 
+function drawGlasses(char, drawRect) {
+  const { lensW, lensH, lensY, leftLensX, rightLensX } = getEyeCoverPosition(char);
+
+  // Frame only - lenses stay clear so the eyes underneath remain visible
+  drawRect(leftLensX - 1, lensY - 1, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
+  drawRect(rightLensX - 1, lensY - 1, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
+  drawRect(leftLensX - 1, lensY + lensH, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
+  drawRect(rightLensX - 1, lensY + lensH, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
+  drawRect(leftLensX - 1, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
+  drawRect(leftLensX + lensW, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
+  drawRect(rightLensX - 1, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
+  drawRect(rightLensX + lensW, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
+
+  // Bridge
+  const bridgeY = lensY + Math.floor(lensH / 2);
+  drawRect(leftLensX + lensW, bridgeY, rightLensX - leftLensX - lensW, 1, COLOR_SUNGLASSES_FRAME);
+}
+
 function drawBlinkEyes(char, drawRect) {
   const { lensW, lensH, lensY, leftLensX, rightLensX } = getEyeCoverPosition(char);
 
@@ -431,6 +449,7 @@ function drawHappyEyes(char, drawRect) {
 
 function drawEyeType(eyeType, char, drawRect) {
   if (eyeType === 'focused') drawSunglasses(char, drawRect);
+  else if (eyeType === 'glasses') drawGlasses(char, drawRect);
   else if (eyeType === 'blink') drawBlinkEyes(char, drawRect);
   else if (eyeType === 'happy') drawHappyEyes(char, drawRect);
 }
