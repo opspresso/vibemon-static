@@ -44,12 +44,16 @@ engine.setState({
   tool: 'Bash',
   project: 'my-project',
   model: 'Opus 4.5',
-  memory: 45
+  memory: 45,
+  usage5h: 62,
+  usageWeek: 78
 });
 engine.render();
 engine.startAnimation();
 </script>
 ```
+
+`memory`, `usage5h`, `usageWeek` accept 0-100 and each render as a labeled bar (context memory, 5-hour usage window, weekly usage window).
 
 ### States
 
