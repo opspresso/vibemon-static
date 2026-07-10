@@ -411,7 +411,7 @@ function drawGlasses(char, drawRect) {
   drawRect(rightLensX + lensW, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
 
   // Bridge
-  const bridgeY = lensY + Math.floor(lensH / 2);
+  const bridgeY = lensY + Math.floor(lensH / 2) - 2;
   drawRect(leftLensX + lensW, bridgeY, rightLensX - leftLensX - lensW, 1, COLOR_SUNGLASSES_FRAME);
 }
 
