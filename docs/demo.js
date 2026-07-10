@@ -43,7 +43,8 @@ async function init() {
       clawd: './characters/clawd.png',
       codex: './characters/codex.png',
       kiro: './characters/kiro.png',
-      claw: './characters/claw.png'
+      claw: './characters/claw.png',
+      daangni: './characters/daangni.png'
     }
   });
   await vibeMonEngine.init();

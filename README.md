@@ -14,7 +14,7 @@ The `docs` folder contains:
 - `demo.css` - Demo styles
 - `demo.js` - Demo controller
 - `js/vibemon-engine-standalone.js` - VibeMon rendering engine
-- `characters/` - Character images (clawd.png, codex.png, kiro.png, claw.png)
+- `characters/` - Character images (clawd.png, codex.png, kiro.png, claw.png, daangni.png)
 
 ## VibeMon Engine
 
@@ -32,7 +32,8 @@ const engine = createVibeMonEngine(container, {
     clawd: 'https://static.vibemon.io/characters/clawd.png',
     codex: 'https://static.vibemon.io/characters/codex.png',
     kiro: 'https://static.vibemon.io/characters/kiro.png',
-    claw: 'https://static.vibemon.io/characters/claw.png'
+    claw: 'https://static.vibemon.io/characters/claw.png',
+    daangni: 'https://static.vibemon.io/characters/daangni.png'
   }
 });
 
@@ -71,6 +72,7 @@ engine.startAnimation();
 - `codex` - Green terminal robot (Codex)
 - `kiro` - White ghost (Kiro)
 - `claw` - Red (OpenClaw)
+- `daangni` - White/teal (Daangn Market)
 
 ## Access
 
@@ -93,7 +95,8 @@ vibemon-static/
 │       ├── clawd.png
 │       ├── codex.png
 │       ├── kiro.png
-│       └── claw.png
+│       ├── claw.png
+│       └── daangni.png
 └── README.md
 ```
 
