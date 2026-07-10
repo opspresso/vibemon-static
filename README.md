@@ -76,7 +76,7 @@ engine.startAnimation();
 
 The site is available at:
 - https://static.vibemon.io (primary)
-- https://nalbam.github.io/vibemon-static/
+- https://opspresso.github.io/vibemon-static/
 
 ## Project Structure
 
@@ -107,6 +107,12 @@ To enable GitHub Pages:
 3. Select "Deploy from a branch"
 4. Choose branch (e.g., `main` or `master`) and `/docs` folder
 5. Save the configuration
+
+## Related Projects
+
+- [vibemon](https://github.com/opspresso/vibemon) - Cloud dashboard & API ([vibemon.io](https://vibemon.io))
+- [vibemon-app](https://github.com/opspresso/vibemon-app) - Desktop App & ESP32 hardware client
+- [vibemon-docs](https://github.com/opspresso/vibemon-docs) - Agent hook installation & setup guide ([docs.vibemon.io](https://docs.vibemon.io))
 
 ## License
 
