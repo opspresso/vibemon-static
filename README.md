@@ -55,6 +55,25 @@ engine.startAnimation();
 
 `memory`, `usage5h`, `usageWeek` accept 0-100 and each render as a labeled bar (context memory, 5-hour usage window, weekly usage window).
 
+### Exports
+
+Besides `createVibeMonEngine`, the module also exports:
+
+```js
+import { states, CHARACTER_CONFIG, CONSTANTS, CHARACTER_NAMES, DEFAULT_CHARACTER } from 'https://static.vibemon.io/js/vibemon-engine-standalone.js';
+```
+
+- `states` - the `STATES` config object (colors, descriptions) keyed by state name
+- `CHARACTER_CONFIG` - per-character rendering config
+- `CHARACTER_NAMES` - `Object.keys(CHARACTER_CONFIG)`, useful for populating a character selector
+- `DEFAULT_CHARACTER` - the character used when none is set
+- `CONSTANTS` - shared engine constants
+
+### Lifecycle
+
+- `engine.stopAnimation()` - stops the animation loop without tearing down the engine
+- `engine.cleanup()` - stops the animation loop and releases resources; call this on unmount (e.g. in a SPA) to avoid a dangling `requestAnimationFrame` loop
+
 ### States
 
 | State | Color | Description |
