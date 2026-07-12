@@ -432,50 +432,73 @@ function drawEyeType(eyeType, char, drawRect) {
   else if (eyeType === 'happy') drawHappyEyes(char, drawRect);
 }
 
+// Draw rects expanded by 1px in outlineColor first (halo pass), then the
+// bodies on top, so the mark stays visible on any backdrop.
+function drawOutlinedRects(rects, bodyColor, outlineColor, drawRect) {
+  for (const [x, y, w, h] of rects) drawRect(x - 1, y - 1, w + 2, h + 2, outlineColor);
+  for (const [x, y, w, h] of rects) drawRect(x, y, w, h, bodyColor);
+}
+
 function drawEffect(effect, char, animFrame, drawRect) {
   const { x: effectX, y: effectY } = char.effect;
   const effectColor = char.color === CONSTANTS.COLOR_WHITE ? COLOR_EFFECT_ALT : CONSTANTS.COLOR_WHITE;
+  const outlineColor = '#000000';
 
   if (effect === 'sparkle') {
     const frame = animFrame % 4;
-    drawRect(effectX + 2, effectY + 2, 2, 2, effectColor);
+    const rects = [[effectX + 2, effectY + 2, 2, 2]];
     if (frame === 0 || frame === 2) {
-      drawRect(effectX + 2, effectY, 2, 2, effectColor);
-      drawRect(effectX + 2, effectY + 4, 2, 2, effectColor);
-      drawRect(effectX, effectY + 2, 2, 2, effectColor);
-      drawRect(effectX + 4, effectY + 2, 2, 2, effectColor);
+      rects.push(
+        [effectX + 2, effectY, 2, 2],
+        [effectX + 2, effectY + 4, 2, 2],
+        [effectX, effectY + 2, 2, 2],
+        [effectX + 4, effectY + 2, 2, 2]
+      );
     } else {
-      drawRect(effectX, effectY, 2, 2, effectColor);
-      drawRect(effectX + 4, effectY, 2, 2, effectColor);
-      drawRect(effectX, effectY + 4, 2, 2, effectColor);
-      drawRect(effectX + 4, effectY + 4, 2, 2, effectColor);
+      rects.push(
+        [effectX, effectY, 2, 2],
+        [effectX + 4, effectY, 2, 2],
+        [effectX, effectY + 4, 2, 2],
+        [effectX + 4, effectY + 4, 2, 2]
+      );
     }
+    drawOutlinedRects(rects, effectColor, outlineColor, drawRect);
   } else if (effect === 'thinking') {
-    drawRect(effectX, effectY + 6, 2, 2, effectColor);
-    drawRect(effectX + 2, effectY + 3, 2, 2, effectColor);
+    const rects = [
+      [effectX, effectY + 6, 2, 2],
+      [effectX + 2, effectY + 3, 2, 2]
+    ];
     if ((animFrame % 12) < 6) {
-      drawRect(effectX + 3, effectY - 2, 6, 2, effectColor);
-      drawRect(effectX + 2, effectY, 8, 3, effectColor);
-      drawRect(effectX + 3, effectY + 3, 6, 1, effectColor);
+      rects.push(
+        [effectX + 3, effectY - 2, 6, 2],
+        [effectX + 2, effectY, 8, 3],
+        [effectX + 3, effectY + 3, 6, 1]
+      );
     } else {
-      drawRect(effectX + 4, effectY - 1, 4, 2, effectColor);
-      drawRect(effectX + 3, effectY + 1, 6, 2, effectColor);
+      rects.push(
+        [effectX + 4, effectY - 1, 4, 2],
+        [effectX + 3, effectY + 1, 6, 2]
+      );
     }
+    drawOutlinedRects(rects, effectColor, outlineColor, drawRect);
   } else if (effect === 'question') {
-    const color = '#000000';
-    drawRect(effectX + 1, effectY, 4, 2, color);
-    drawRect(effectX + 4, effectY + 2, 2, 2, color);
-    drawRect(effectX + 2, effectY + 4, 2, 2, color);
-    drawRect(effectX + 2, effectY + 6, 2, 2, color);
-    drawRect(effectX + 2, effectY + 10, 2, 2, color);
+    drawOutlinedRects([
+      [effectX + 1, effectY, 4, 2],
+      [effectX + 4, effectY + 2, 2, 2],
+      [effectX + 2, effectY + 4, 2, 2],
+      [effectX + 2, effectY + 6, 2, 2],
+      [effectX + 2, effectY + 10, 2, 2]
+    ], '#000000', CONSTANTS.COLOR_WHITE, drawRect);
   } else if (effect === 'zzz') {
     if ((animFrame % 20) < 10) {
-      drawRect(effectX, effectY, 6, 1, effectColor);
-      drawRect(effectX + 4, effectY + 1, 2, 1, effectColor);
-      drawRect(effectX + 3, effectY + 2, 2, 1, effectColor);
-      drawRect(effectX + 2, effectY + 3, 2, 1, effectColor);
-      drawRect(effectX + 1, effectY + 4, 2, 1, effectColor);
-      drawRect(effectX, effectY + 5, 6, 1, effectColor);
+      drawOutlinedRects([
+        [effectX, effectY, 6, 1],
+        [effectX + 4, effectY + 1, 2, 1],
+        [effectX + 3, effectY + 2, 2, 1],
+        [effectX + 2, effectY + 3, 2, 1],
+        [effectX + 1, effectY + 4, 2, 1],
+        [effectX, effectY + 5, 6, 1]
+      ], effectColor, outlineColor, drawRect);
     }
   } else if (effect === 'exclamation') {
     // Draw exclamation mark (white with red border)
