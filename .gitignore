@@ -5,6 +5,10 @@
 .DS_Store
 *.pem
 
+# local env files
+.env.local
+.env
+
 # claude
 .claude/
 .prompt-*.md
