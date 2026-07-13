@@ -19,3 +19,7 @@ prompt.md
 # pytest
 __pycache__
 .pytest_cache
+
+# outputs
+outputs/
+.playwright-mcp/

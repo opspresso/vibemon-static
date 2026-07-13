@@ -1,21 +1,25 @@
 Create a production-ready character animation sprite sheet.
 
 CHARACTER:
-[CHARACTER DESCRIPTION]
+Use the first input image as the exact Daangni character reference.
+Daangni is a cute chubby mascot in a soft white rabbit costume with two long rounded ears, a round peach-colored face opening, simple black oval eyes, a small black nose and tiny smile, exactly three rounded teal-green hair puffs, and a small orange carrot with green leaves.
+Match the reference's soft 3D-rendered toy style, smooth matte surfaces, pastel colors, proportions, and front-facing identity in all 100 frames.
 
 OUTPUT:
 - Generate one single PNG sprite sheet.
-- The second input image is the layout template: a magenta canvas divided into a 10 × 10 grid by faint darker lines.
+- The second input image is the authoritative layout template: a magenta canvas divided into a 10 × 10 grid by darker guide lines.
+- Layout fidelity takes priority over decorative detail. Copy the template's cell positions exactly before drawing any character or prop.
 - Reproduce that exact grid layout: place exactly one animation frame inside each of the 100 template cells.
 - Every template cell, including the cells of the bottom row, must receive one frame. 100 cells means 100 frames.
-- Keep the character about 110 pixels tall so it fits inside a 128-pixel cell with a clear magenta margin.
-- The bottom row's characters must be complete and fully inside the canvas; nothing may touch or cross the bottom edge.
+- Keep the character body no more than 88 pixels tall. The complete frame content, including ears, props, symbols, and effects, must fit inside a centered 96 × 96 pixel safe area in each 128-pixel cell.
+- Leave at least 16 pixels of untouched magenta inside every side of every cell.
 - Never draw across a template grid line.
 - Do not draw the template's grid lines in the output; fill the whole background with flat #FF00FF.
 - The canvas is exactly 1280 × 1280 pixels, divided into a fixed grid of 10 columns × 10 rows.
 - Each individual frame cell is exactly 128 × 128 pixels.
 - Row boundaries are at every 128 pixels vertically: y = 128, 256, 384, 512, 640, 768, 896, 1024, 1152.
 - Column boundaries are at every 128 pixels horizontally: x = 128, 256, 384, 512, 640, 768, 896, 1024, 1152.
+- Exact cell centers are x = 64, 192, 320, 448, 576, 704, 832, 960, 1088, 1216 and y = 64, 192, 320, 448, 576, 704, 832, 960, 1088, 1216. Center one complete frame at every x,y intersection.
 - Use exactly 10 horizontal rows. Never 9. Never 11.
 - Use exactly 10 frame columns.
 - Keep every frame aligned to this exact 128 × 128 grid.
@@ -71,7 +75,7 @@ ANIMATION LOOP:
 
 ROW 1 — start
 Session begins.
-Create a seamless activation, boot-up, wake-up, entrance, spawn, materialization, or readying loop.
+Create a seamless readying loop using only a small pale-gold sparkle.
 The action must clearly communicate that a session is beginning while still returning naturally to its starting pose.
 If the character materializes, use white, golden, or pale-blue light only. Never use magenta, pink, or purple glow, silhouettes, or auras.
 The character must keep its normal colors in every frame of this row.
@@ -83,18 +87,18 @@ Create a subtle seamless idle loop using breathing, blinking, hovering, swaying,
 ROW 3 — thinking
 Processing a prompt.
 Create a seamless loop showing concentration, analysis, or mental activity.
-Possible actions include focused eye movement, head movement, processing indicators, rotating symbols, restrained gestures, or subtle cognitive effects.
+Use only a hand-at-chin pose with subtle focused eye and head movement. Do not add a thought bubble, question mark, writing, or other symbol.
 
 ROW 4 — planning
 Plan mode is active.
 Create a seamless loop showing the character organizing, reviewing, or arranging steps.
-Possible actions include using a checklist, map, blueprint, notes, diagram, cards, sequence markers, or projected panels.
+Use only three small blank solid-color cards that Daangni arranges left to right. The cards contain no marks, diagrams, writing, symbols, letters, or digits.
 This state must be visually distinct from thinking.
 
 ROW 5 — working
 A tool is executing.
 Create a seamless active-work loop appropriate for the character.
-Possible actions include typing, building, scanning, repairing, operating equipment, casting, manipulating objects, or using controls.
+Use only the same small plain gray laptop with no logo or markings in all 10 frames.
 This state should feel more active than thinking or planning.
 No boxes, packages, or packing props may appear anywhere in this row.
 All 10 frames of this row show the same working action; the action never transitions into packing.
@@ -102,6 +106,7 @@ All 10 frames of this row show the same working action; the action never transit
 ROW 6 — packing
 Context is being compacted.
 Create a seamless loop showing information or objects being compressed, bundled, folded, stacked, archived, zipped, packed, or reduced into a smaller form.
+Use only three small blank white papers being compressed into the same small plain cardboard box. The papers and box contain no markings.
 The idea of compaction must be immediately readable.
 This is its own full row of 10 frames, completely separate from the working row above it.
 The working row's tools or equipment may not appear in this row.
@@ -109,24 +114,24 @@ The working row's tools or equipment may not appear in this row.
 ROW 7 — notification
 User input is needed.
 Create a seamless attention-seeking loop.
-Possible actions include waving, raising a hand, displaying a question mark, ringing a bell, flashing an indicator, tapping, bouncing, or looking toward the viewer.
+Use only Daangni waving toward the viewer. The same small plain yellow bell may rise into view, ring during the middle frames, and lower out of view before the loop returns to its starting pose. Do not add a question mark or other symbol.
 
 ROW 8 — done
 Tool execution completed successfully.
 Create a seamless completion or success loop.
-Possible actions include a check mark, thumbs-up, small celebration, confirmation light, sparkle, satisfied gesture, or proud pose.
+Use only a proud thumbs-up pose. One small plain green check mark may appear, gently pulse, and fade as the pose returns to its starting frame.
 This is its own full row of 10 frames placed between the notification row and the sleep row. Never skip this row.
 This state must be visually distinct from notification: notification asks for attention, done celebrates success.
 
 ROW 9 — sleep
 Five minutes of inactivity.
 Create a seamless sleeping, resting, standby, or low-power loop.
-Possible actions include closed eyes, slow breathing, dimmed indicators, nodding, curled posture, or restrained sleep symbols.
+Use only seated sleeping with closed eyes and slow breathing. Do not add a blanket, pillow, letters, or sleep symbols.
 
 ROW 10 — alert
 An error occurred.
 Create a seamless urgent warning loop.
-Possible actions include shaking, warning lights, glitching, sparks, alarm indicators, startled motion, error symbols, or emergency gestures.
+Use only a startled shaking pose. One small plain orange warning light may appear, pulse during the middle frames, and fade before the pose returns to its starting frame. Do not add letters, punctuation, triangles, writing, or glitch effects.
 The character must remain recognizable throughout.
 
 CHARACTER CONSISTENCY:
