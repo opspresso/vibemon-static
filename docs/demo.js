@@ -8,7 +8,7 @@ const domRefs = {};
 
 // Current state
 let currentState = 'start';
-let currentCharacter = 'clawd';
+let currentCharacter = 'vibemon';
 let iconType = 'emoji';
 
 // Parse URL parameters
@@ -40,8 +40,8 @@ async function init() {
   vibeMonEngine = createVibeMonEngine(container, {
     useEmoji: iconType === 'emoji',
     characterImageUrls: {
+      vibemon: './characters/vibemon.png',
       clawd: './characters/clawd.png',
-      codex: './characters/codex.png',
       kiro: './characters/kiro.png',
       claw: './characters/claw.png',
       daangni: './characters/daangni.png'

@@ -15,7 +15,7 @@
 // =============================================================================
 
 const CONSTANTS = {
-  DEFAULT_CHARACTER: "clawd",
+  DEFAULT_CHARACTER: "vibemon",
   CHAR_SIZE: 128,
   SCALE: 2,
   COLOR_EYE: "#000000",
@@ -193,11 +193,11 @@ const STATES = {
 };
 
 const CHARACTER_CONFIG = {
-  clawd: { name: "clawd", displayName: "Clawd", color: "#D97757", eyes: { left: { x: 14, y: 22 }, right: { x: 44, y: 22 }, size: 6 }, effect: { x: 52, y: 4 } },
-  codex: { name: "codex", displayName: "Codex", color: "#10A37F", eyes: { left: { x: 23, y: 22 }, right: { x: 38, y: 22 }, size: 4 }, effect: { x: 47, y: 3 } },
-  kiro: { name: "kiro", displayName: "Kiro", color: "#FFFFFF", eyes: { left: { x: 30, y: 21 }, right: { x: 39, y: 21 }, w: 5, h: 8 }, effect: { x: 50, y: 3 } },
+  vibemon: { name: "vibemon", displayName: "VibeMon", color: "#FFFFFF", eyes: { left: { x: 22, y: 26 }, right: { x: 38, y: 26 }, w: 4, h: 6 }, effect: { x: 48, y: 3 } },
+  clawd: { name: "clawd", displayName: "Clawd", color: "#D97757", eyes: { left: { x: 14, y: 21 }, right: { x: 44, y: 21 }, size: 6 }, effect: { x: 52, y: 4 } },
+  kiro: { name: "kiro", displayName: "Kiro", color: "#FFFFFF", eyes: { left: { x: 29, y: 20 }, right: { x: 39, y: 20 }, w: 5, h: 10 }, effect: { x: 50, y: 3 } },
   claw: { name: "claw", displayName: "Claw", color: "#DD4444", eyes: { left: { x: 21, y: 16 }, right: { x: 38, y: 16 }, size: 6 }, effect: { x: 49, y: 4 } },
-  daangni: { name: "daangni", displayName: "Daangni", color: "#F2CAB2", eyes: { left: { x: 20, y: 35 }, right: { x: 37, y: 35 }, size: 6 }, effect: { x: 47, y: 3 } }
+  daangni: { name: "daangni", displayName: "Daangni", color: "#F2CAB2", eyes: { left: { x: 20, y: 35 }, right: { x: 39, y: 35 }, w: 4, h: 6 }, effect: { x: 47, y: 3 } }
 };
 
 const TOOL_TEXTS = {
@@ -627,8 +627,8 @@ export class VibeMonEngine {
     this.container = container;
     this.useEmoji = options.useEmoji || false;
     this.characterImageUrls = options.characterImageUrls || {
+      vibemon: 'https://static.vibemon.io/characters/vibemon.png',
       clawd: 'https://static.vibemon.io/characters/clawd.png',
-      codex: 'https://static.vibemon.io/characters/codex.png',
       kiro: 'https://static.vibemon.io/characters/kiro.png',
       claw: 'https://static.vibemon.io/characters/claw.png',
       daangni: 'https://static.vibemon.io/characters/daangni.png'
@@ -640,7 +640,7 @@ export class VibeMonEngine {
     this.iconContexts = [];
 
     this.currentState = 'start';
-    this.currentCharacter = 'clawd';
+    this.currentCharacter = 'vibemon';
     this.currentProject = '-';
     this.currentTool = '-';
     this.currentModel = '-';

@@ -14,7 +14,7 @@ The `docs` folder contains:
 - `demo.css` - Demo styles
 - `demo.js` - Demo controller
 - `js/vibemon-engine-standalone.js` - VibeMon rendering engine
-- `characters/` - Character images (clawd.png, codex.png, kiro.png, claw.png, daangni.png)
+- `characters/` - Character images (vibemon.png, clawd.png, kiro.png, claw.png, daangni.png)
 
 ## VibeMon Engine
 
@@ -29,8 +29,8 @@ const container = document.getElementById('vibemon-display');
 const engine = createVibeMonEngine(container, {
   useEmoji: true,
   characterImageUrls: {
+    vibemon: 'https://static.vibemon.io/characters/vibemon.png',
     clawd: 'https://static.vibemon.io/characters/clawd.png',
-    codex: 'https://static.vibemon.io/characters/codex.png',
     kiro: 'https://static.vibemon.io/characters/kiro.png',
     claw: 'https://static.vibemon.io/characters/claw.png',
     daangni: 'https://static.vibemon.io/characters/daangni.png'
@@ -91,8 +91,8 @@ import { states, CHARACTER_CONFIG, CONSTANTS, CHARACTER_NAMES, DEFAULT_CHARACTER
 
 ### Characters
 
+- `vibemon` - Purple (VibeMon, default)
 - `clawd` - Orange (Claude Code)
-- `codex` - Green terminal robot (Codex)
 - `kiro` - White ghost (Kiro)
 - `claw` - Red (OpenClaw)
 - `daangni` - White/teal (Daangn)
@@ -115,8 +115,8 @@ vibemon-static/
 │   ├── js/
 │   │   └── vibemon-engine-standalone.js
 │   └── characters/
+│       ├── vibemon.png
 │       ├── clawd.png
-│       ├── codex.png
 │       ├── kiro.png
 │       ├── claw.png
 │       └── daangni.png
