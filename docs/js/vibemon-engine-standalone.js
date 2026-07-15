@@ -193,11 +193,11 @@ const STATES = {
 };
 
 const CHARACTER_CONFIG = {
-  vibemon: { name: "vibemon", displayName: "VibeMon", color: "#FFFFFF", eyes: { left: { x: 22, y: 26 }, right: { x: 38, y: 26 }, w: 4, h: 6 }, effect: { x: 48, y: 3 } },
-  clawd: { name: "clawd", displayName: "Clawd", color: "#D97757", eyes: { left: { x: 14, y: 21 }, right: { x: 44, y: 21 }, size: 6 }, effect: { x: 52, y: 4 } },
-  kiro: { name: "kiro", displayName: "Kiro", color: "#FFFFFF", eyes: { left: { x: 29, y: 20 }, right: { x: 39, y: 20 }, w: 5, h: 10 }, effect: { x: 50, y: 3 } },
-  claw: { name: "claw", displayName: "Claw", color: "#DD4444", eyes: { left: { x: 21, y: 16 }, right: { x: 38, y: 16 }, size: 6 }, effect: { x: 49, y: 4 } },
-  daangni: { name: "daangni", displayName: "Daangni", color: "#F2CAB2", eyes: { left: { x: 20, y: 35 }, right: { x: 39, y: 35 }, w: 4, h: 6 }, effect: { x: 47, y: 3 } }
+  vibemon: { name: "vibemon", displayName: "VibeMon", color: "#FFFFFF", eyes: { left: { x: 44, y: 52 }, right: { x: 76, y: 52 }, w: 8, h: 12 }, effect: { x: 96, y: 6 } },
+  clawd: { name: "clawd", displayName: "Clawd", color: "#D97757", eyes: { left: { x: 28, y: 42 }, right: { x: 88, y: 42 }, size: 12 }, effect: { x: 104, y: 8 } },
+  kiro: { name: "kiro", displayName: "Kiro", color: "#FFFFFF", eyes: { left: { x: 62, y: 36 }, right: { x: 88, y: 36 }, w: 10, h: 20 }, effect: { x: 100, y: 6 } },
+  claw: { name: "claw", displayName: "Claw", color: "#DD4444", eyes: { left: { x: 42, y: 32 }, right: { x: 76, y: 32 }, size: 12 }, effect: { x: 98, y: 8 } },
+  daangni: { name: "daangni", displayName: "Daangni", color: "#F2CAB2", eyes: { left: { x: 40, y: 70 }, right: { x: 78, y: 70 }, w: 8, h: 12 }, effect: { x: 94, y: 6 } }
 };
 
 const TOOL_TEXTS = {
@@ -336,43 +336,34 @@ const ICON_DRAW_FUNCS = [drawFolderIcon, drawToolIcon, drawRobotIcon, drawBrainI
 
 const COLOR_EFFECT_ALT = '#FFA500';
 const COLOR_SUNGLASSES_FRAME = '#111111';
-const COLOR_SUNGLASSES_LENS = '#001100';
-const COLOR_SUNGLASSES_SHINE = '#003300';
+
+// Registry eye/effect anchors are authored in canvas pixels (0..CHAR_SIZE)
+// so characters can be aligned with 1px precision, while the drawing
+// functions work on the SCALE-wide pixel-art grid. Convert the anchors once
+// here — fractional art units scale back to whole pixels in drawRect.
+function toArtUnits(char) {
+  if (!char || !char.eyes || !char.effect) return char;
+  const s = CONSTANTS.SCALE;
+  const eyes = {
+    ...char.eyes,
+    left: { x: char.eyes.left.x / s, y: char.eyes.left.y / s },
+    right: { x: char.eyes.right.x / s, y: char.eyes.right.y / s }
+  };
+  if (eyes.w !== undefined) eyes.w = char.eyes.w / s;
+  if (eyes.h !== undefined) eyes.h = char.eyes.h / s;
+  if (eyes.size !== undefined) eyes.size = char.eyes.size / s;
+  return { ...char, eyes, effect: { x: char.effect.x / s, y: char.effect.y / s } };
+}
 
 function getEyeCoverPosition(char) {
-  const isKiro = char.name === 'kiro';
   const eyeW = char.eyes.w || char.eyes.size || 6;
   const eyeH = char.eyes.h || char.eyes.size || 6;
   const lensW = eyeW + 4;
   const lensH = eyeH + 2;
-  const lensY = char.eyes.left.y - 1 - (isKiro ? 2 : 0);
-  const leftLensX = char.eyes.left.x - 2 + (isKiro ? 2 : 0);
-  const rightLensX = char.eyes.right.x - 2 + (isKiro ? 5 : 0);
+  const lensY = char.eyes.left.y - 1;
+  const leftLensX = char.eyes.left.x - 2;
+  const rightLensX = char.eyes.right.x - 2;
   return { lensW, lensH, lensY, leftLensX, rightLensX };
-}
-
-function drawSunglasses(char, drawRect) {
-  const { lensW, lensH, lensY, leftLensX, rightLensX } = getEyeCoverPosition(char);
-
-  // Lenses
-  drawRect(leftLensX, lensY, lensW, lensH, COLOR_SUNGLASSES_LENS);
-  drawRect(leftLensX + 1, lensY + 1, 2, 1, COLOR_SUNGLASSES_SHINE);
-  drawRect(rightLensX, lensY, lensW, lensH, COLOR_SUNGLASSES_LENS);
-  drawRect(rightLensX + 1, lensY + 1, 2, 1, COLOR_SUNGLASSES_SHINE);
-
-  // Frame
-  drawRect(leftLensX - 1, lensY - 1, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
-  drawRect(rightLensX - 1, lensY - 1, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
-  drawRect(leftLensX - 1, lensY + lensH, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
-  drawRect(rightLensX - 1, lensY + lensH, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
-  drawRect(leftLensX - 1, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
-  drawRect(leftLensX + lensW, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
-  drawRect(rightLensX - 1, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
-  drawRect(rightLensX + lensW, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
-
-  // Bridge
-  const bridgeY = lensY + Math.floor(lensH / 2);
-  drawRect(leftLensX + lensW, bridgeY, rightLensX - leftLensX - lensW, 1, COLOR_SUNGLASSES_FRAME);
 }
 
 function drawGlasses(char, drawRect) {
@@ -426,8 +417,7 @@ function drawHappyEyes(char, drawRect) {
 }
 
 function drawEyeType(eyeType, char, drawRect) {
-  if (eyeType === 'focused') drawSunglasses(char, drawRect);
-  else if (eyeType === 'glasses') drawGlasses(char, drawRect);
+  if (eyeType === 'glasses') drawGlasses(char, drawRect);
   else if (eyeType === 'blink') drawBlinkEyes(char, drawRect);
   else if (eyeType === 'happy') drawHappyEyes(char, drawRect);
 }
@@ -535,6 +525,10 @@ class CharacterRenderer {
     this.characterImages = {};
     this.imagesLoaded = false;
     this.boundDrawRect = this.drawRect.bind(this);
+    // Registry anchors are in canvas pixels; convert once to the art-unit grid.
+    this.charactersArt = Object.fromEntries(
+      Object.entries(CHARACTER_CONFIG).map(([name, char]) => [name, toArtUnits(char)])
+    );
   }
 
   async preloadImages(imageUrls) {
@@ -560,7 +554,7 @@ class CharacterRenderer {
 
   drawCharacter(eyeType, effect, currentState, currentCharacter, animFrame) {
     const state = STATES[currentState] || STATES.idle;
-    const char = CHARACTER_CONFIG[currentCharacter] || CHARACTER_CONFIG[CONSTANTS.DEFAULT_CHARACTER];
+    const char = this.charactersArt[currentCharacter] || this.charactersArt[CONSTANTS.DEFAULT_CHARACTER];
 
     // Background
     this.ctx.fillStyle = state.bgColor;
@@ -855,7 +849,8 @@ export class VibeMonEngine {
   _renderCharacter() {
     if (!this.characterRenderer) return;
     const state = STATES[this.currentState] || STATES.idle;
-    this.characterRenderer.drawCharacter(state.eyeType, state.effect, this.currentState, this.currentCharacter, this.animFrame);
+    const eyeType = this.currentState === 'idle' && this.blinkFrame === CONSTANTS.BLINK_START_FRAME ? 'blink' : state.eyeType;
+    this.characterRenderer.drawCharacter(eyeType, state.effect, this.currentState, this.currentCharacter, this.animFrame);
   }
 
   _updateFloatingPosition() {
@@ -890,7 +885,8 @@ export class VibeMonEngine {
 
       const state = STATES[this.currentState];
       if (state && this.characterRenderer) {
-        this.characterRenderer.drawCharacter(state.eyeType, state.effect, this.currentState, this.currentCharacter, this.animFrame);
+        const eyeType = this.currentState === 'idle' && this.blinkFrame === CONSTANTS.BLINK_START_FRAME ? 'blink' : state.eyeType;
+        this.characterRenderer.drawCharacter(eyeType, state.effect, this.currentState, this.currentCharacter, this.animFrame);
       }
     }
 

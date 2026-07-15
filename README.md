@@ -87,7 +87,7 @@ import { states, CHARACTER_CONFIG, CONSTANTS, CHARACTER_NAMES, DEFAULT_CHARACTER
 | `notification` | Yellow | User input needed |
 | `done` | Green | Tool completed |
 | `sleep` | Navy | 5min inactivity |
-| `alert` | Red | Error occurred |
+| `alert` | Red | Critical error/failure |
 
 ### Characters
 
@@ -112,6 +112,8 @@ vibemon-static/
 │   ├── demo.html       # Live demo (simulator)
 │   ├── demo.css
 │   ├── demo.js
+│   ├── favicon.ico
+│   ├── CNAME           # Custom domain (static.vibemon.io)
 │   ├── js/
 │   │   └── vibemon-engine-standalone.js
 │   └── characters/
@@ -120,6 +122,7 @@ vibemon-static/
 │       ├── kiro.png
 │       ├── claw.png
 │       └── daangni.png
+├── prompts/            # Sprite-sheet generation scripts & references
 └── README.md
 ```
 
