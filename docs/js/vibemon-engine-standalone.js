@@ -335,7 +335,7 @@ const ICON_DRAW_FUNCS = [drawFolderIcon, drawToolIcon, drawRobotIcon, drawBrainI
 // =============================================================================
 
 const COLOR_EFFECT_ALT = '#FFA500';
-const COLOR_SUNGLASSES_FRAME = '#111111';
+const COLOR_GLASSES_FRAME = '#111111';
 
 // Registry eye/effect anchors are authored in canvas pixels (0..CHAR_SIZE)
 // so characters can be aligned with 1px precision, while the drawing
@@ -370,18 +370,18 @@ function drawGlasses(char, drawRect) {
   const { lensW, lensH, lensY, leftLensX, rightLensX } = getEyeCoverPosition(char);
 
   // Frame only - lenses stay clear so the eyes underneath remain visible
-  drawRect(leftLensX - 1, lensY - 1, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
-  drawRect(rightLensX - 1, lensY - 1, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
-  drawRect(leftLensX - 1, lensY + lensH, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
-  drawRect(rightLensX - 1, lensY + lensH, lensW + 2, 1, COLOR_SUNGLASSES_FRAME);
-  drawRect(leftLensX - 1, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
-  drawRect(leftLensX + lensW, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
-  drawRect(rightLensX - 1, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
-  drawRect(rightLensX + lensW, lensY, 1, lensH, COLOR_SUNGLASSES_FRAME);
+  drawRect(leftLensX - 1, lensY - 1, lensW + 2, 1, COLOR_GLASSES_FRAME);
+  drawRect(rightLensX - 1, lensY - 1, lensW + 2, 1, COLOR_GLASSES_FRAME);
+  drawRect(leftLensX - 1, lensY + lensH, lensW + 2, 1, COLOR_GLASSES_FRAME);
+  drawRect(rightLensX - 1, lensY + lensH, lensW + 2, 1, COLOR_GLASSES_FRAME);
+  drawRect(leftLensX - 1, lensY, 1, lensH, COLOR_GLASSES_FRAME);
+  drawRect(leftLensX + lensW, lensY, 1, lensH, COLOR_GLASSES_FRAME);
+  drawRect(rightLensX - 1, lensY, 1, lensH, COLOR_GLASSES_FRAME);
+  drawRect(rightLensX + lensW, lensY, 1, lensH, COLOR_GLASSES_FRAME);
 
   // Bridge
   const bridgeY = lensY + Math.floor(lensH / 2) - 2;
-  drawRect(leftLensX + lensW, bridgeY, rightLensX - leftLensX - lensW, 1, COLOR_SUNGLASSES_FRAME);
+  drawRect(leftLensX + lensW, bridgeY, rightLensX - leftLensX - lensW, 1, COLOR_GLASSES_FRAME);
 }
 
 function drawBlinkEyes(char, drawRect) {
