@@ -4,7 +4,7 @@ Static assets (registry JSON, character PNGs) served via GitHub Pages from the `
 
 ## About
 
-This repository is the canonical asset home for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters. The canonical rendering modules also live here: `js/vibemon-engine.js` and `js/vibemon-bubble.js`/`css/vibemon-bubble.css` are the source of truth, vendored at build time by the Desktop app ([vibemon-app](https://github.com/opspresso/vibemon-app)) and, for the engine plus the bubble module's helpers, by the dashboard ([vibemon](https://github.com/opspresso/vibemon) `src/lib/character-canvas.ts`).
+This repository is the canonical asset home for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters. The canonical rendering modules also live here: `js/vibemon-engine.js` and `js/vibemon-bubble.js`/`css/vibemon-bubble.css` are the source of truth, vendored at build time by the Desktop app ([vibemon-app](https://github.com/opspresso/vibemon-app)) and, for the engine plus the bubble module's helpers, by the dashboard ([vibemon](https://github.com/opspresso/vibemon) `src/vendor/`).
 
 ## Files
 
