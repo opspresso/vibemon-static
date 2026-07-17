@@ -4,14 +4,16 @@ Static assets (registry JSON, character PNGs) served via GitHub Pages from the `
 
 ## About
 
-This repository is the canonical asset home for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters. State rendering itself lives in the consumers: the Desktop app's bundled engine ([vibemon-app](https://github.com/opspresso/vibemon-app) `src/engine/`) and the dashboard's canvas renderer ([vibemon](https://github.com/opspresso/vibemon) `src/lib/character-canvas.ts`).
+This repository is the canonical asset home for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters. The canonical rendering modules also live here: `js/vibemon-engine.js` and `js/vibemon-bubble.js`/`css/vibemon-bubble.css` are the source of truth, vendored at build time by the Desktop app ([vibemon-app](https://github.com/opspresso/vibemon-app)) and, for the engine plus the bubble module's helpers, by the dashboard ([vibemon](https://github.com/opspresso/vibemon) `src/lib/character-canvas.ts`).
 
 ## Files
 
 The `docs` folder contains:
 - `index.html` - Landing page (live character preview cycling random states)
-- `js/vibemon-engine.js` - Rendering engine used by the landing page (verbatim copy of vibemon-app's `src/engine/vibemon-engine.js`)
-- `characters/` - Character images (vibemon.png, codex.png, clawd.png, kiro.png, claw.png, daangni.png)
+- `js/vibemon-engine.js` - Character rendering engine (source of truth; vendored by vibemon-app and vibemon at build time, imported directly here)
+- `js/vibemon-bubble.js` - Speech-bubble rendering (source of truth; vendored by vibemon-app at build time, imported directly here)
+- `css/vibemon-bubble.css` - Speech-bubble styles (source of truth; vendored by vibemon-app at build time, linked directly here)
+- `characters/` - Character images (vibemon.png, clawd.png, codex.png, kiro.png, claw.png, daangni.png)
 - `data/` - Canonical state/character registry (states.json, characters.json)
 
 ## Canonical Registry
@@ -50,8 +52,8 @@ these files. Adding a character requires both the registry entry in
 ### Characters
 
 - `vibemon` - Purple (VibeMon, default)
-- `codex` - Blue cloud (Codex CLI; light eyes on a dark screen — uses `eyeColor`/`glassesColor`)
 - `clawd` - Orange (Claude Code)
+- `codex` - Blue cloud (Codex CLI; light eyes on a dark screen — uses `eyeColor`/`glassesColor`)
 - `kiro` - White ghost (Kiro)
 - `claw` - Red (OpenClaw)
 - `daangni` - White/teal (Daangn)
@@ -73,14 +75,17 @@ vibemon-static/
 │   ├── favicon.ico
 │   ├── CNAME           # Custom domain (static.vibemon.io)
 │   ├── js/
-│   │   └── vibemon-engine.js  # Copy of vibemon-app src/engine/vibemon-engine.js
+│   │   ├── vibemon-engine.js  # Character rendering engine (source of truth)
+│   │   └── vibemon-bubble.js  # Speech-bubble rendering (source of truth)
+│   ├── css/
+│   │   └── vibemon-bubble.css # Speech-bubble styles (source of truth)
 │   ├── data/
 │   │   ├── states.json
 │   │   └── characters.json
 │   └── characters/
 │       ├── vibemon.png
-│       ├── codex.png
 │       ├── clawd.png
+│       ├── codex.png
 │       ├── kiro.png
 │       ├── claw.png
 │       └── daangni.png
