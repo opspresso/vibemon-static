@@ -143,6 +143,24 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
         }
+        /* Sizing matches vibemon-app's .vibemon-display / vibemon's
+           .characterContainer so the engine's floating-position offsets
+           (CHAR_X_BASE/CHAR_Y_BASE ± FLOAT_AMPLITUDE) land inside the box. */
+        #vibemon-live {
+            position: relative;
+            width: 172px;
+            height: 160px;
+            flex-shrink: 0;
+        }
+        #vibemon-live .vibemon-canvas {
+            position: absolute;
+            top: 20px;
+            left: 22px;
+            width: 128px;
+            height: 128px;
+            image-rendering: pixelated;
+            transition: top 0.1s ease-out, left 0.1s ease-out;
+        }
         /* vibemon-bubble.css supplies .bubble/.bubble-row/.bubble-tail etc.;
            this page only needs the status row, sized/colored to match the
            rest of the hero. */
@@ -225,72 +243,84 @@
             daangni: 'Daangn'
         };
 
-        const [{ characters, default: defaultCharacter }, { states }] = await Promise.all([
-            fetch('./data/characters.json').then(r => r.json()),
-            fetch('./data/states.json').then(r => r.json())
-        ]);
-
-        // Build the gallery from the registry itself so every character it
-        // defines shows up here — no separate hand-kept list to fall out of sync.
-        const galleryEl = document.getElementById('characters');
-        for (const [name, config] of Object.entries(characters)) {
-            const card = document.createElement('div');
-            card.className = 'character';
-            card.dataset.character = name;
-            card.innerHTML = `
-                <img src="./characters/${config.image}" alt="${config.displayName}">
-                <div class="character-name">${config.displayName}</div>
-                <div class="character-platform">${PLATFORM_LABELS[name] || config.displayName}</div>
-            `;
-            galleryEl.appendChild(card);
+        async function fetchJson(url) {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+            return res.json();
         }
 
-        const engine = createVibeMonEngine(document.getElementById('vibemon-live'), {
-            characters,
-            defaultCharacter,
-            characterImageUrls: Object.fromEntries(
-                Object.entries(characters).map(([name, config]) => [name, `./characters/${config.image}`])
-            ),
-            states
-        });
-        await engine.init();
+        try {
+            const [{ characters, default: defaultCharacter }, { states }] = await Promise.all([
+                fetchJson('./data/characters.json'),
+                fetchJson('./data/states.json')
+            ]);
 
-        const stateNames = Object.keys(states);
-        const bubble = document.getElementById('live-bubble');
-        let currentState = null;
-        let currentCharacter = defaultCharacter;
+            // Build the gallery from the registry itself so every character it
+            // defines shows up here — no separate hand-kept list to fall out of sync.
+            const galleryEl = document.getElementById('characters');
+            for (const [name, config] of Object.entries(characters)) {
+                const card = document.createElement('div');
+                card.className = 'character';
+                card.dataset.character = name;
+                card.innerHTML = `
+                    <img src="./characters/${config.image}" alt="${config.displayName}">
+                    <div class="character-name">${config.displayName}</div>
+                    <div class="character-platform">${PLATFORM_LABELS[name] || config.displayName}</div>
+                `;
+                galleryEl.appendChild(card);
+            }
 
-        function render() {
-            engine.setState({ state: currentState, character: currentCharacter });
-            engine.render();
-            const config = states[currentState];
-            renderBubble(bubble, {
-                status: { type: 'text', text: config.text, showLoading: config.loading, slow: currentState !== 'working' }
-            }, 'left', config.color, { opaque: true });
+            const engine = createVibeMonEngine(document.getElementById('vibemon-live'), {
+                characters,
+                defaultCharacter,
+                characterImageUrls: Object.fromEntries(
+                    Object.entries(characters).map(([name, config]) => [name, `./characters/${config.image}`])
+                ),
+                states
+            });
+            await engine.init();
+
+            const stateNames = Object.keys(states);
+            const bubble = document.getElementById('live-bubble');
+            let currentState = null;
+            let currentCharacter = defaultCharacter;
+
+            const render = () => {
+                engine.setState({ state: currentState, character: currentCharacter });
+                engine.render();
+                const config = states[currentState];
+                renderBubble(bubble, {
+                    status: { type: 'text', text: config.text, showLoading: config.loading, slow: currentState !== 'working' }
+                }, 'left', config.color, { opaque: true });
+            };
+
+            const showRandomState = () => {
+                const candidates = stateNames.filter(name => name !== currentState);
+                currentState = candidates[Math.floor(Math.random() * candidates.length)];
+                render();
+            };
+
+            // Gallery cards select the previewed character
+            const cards = document.querySelectorAll('.character[data-character]');
+            const selectCharacter = (name) => {
+                if (!characters[name]) return;
+                currentCharacter = name;
+                cards.forEach(card => card.classList.toggle('selected', card.dataset.character === name));
+                render();
+            };
+            cards.forEach(card => {
+                card.addEventListener('click', () => selectCharacter(card.dataset.character));
+            });
+
+            showRandomState();
+            selectCharacter(defaultCharacter);
+            engine.startAnimation();
+            setInterval(showRandomState, STATE_CYCLE_MS);
+        } catch (err) {
+            console.error('VibeMon: failed to load character registry', err);
+            document.getElementById('vibemon-live').textContent = 'Live preview unavailable.';
+            document.getElementById('characters').textContent = 'Character gallery unavailable.';
         }
-
-        function showRandomState() {
-            const candidates = stateNames.filter(name => name !== currentState);
-            currentState = candidates[Math.floor(Math.random() * candidates.length)];
-            render();
-        }
-
-        // Gallery cards select the previewed character
-        const cards = document.querySelectorAll('.character[data-character]');
-        function selectCharacter(name) {
-            if (!characters[name]) return;
-            currentCharacter = name;
-            cards.forEach(card => card.classList.toggle('selected', card.dataset.character === name));
-            render();
-        }
-        cards.forEach(card => {
-            card.addEventListener('click', () => selectCharacter(card.dataset.character));
-        });
-
-        showRandomState();
-        selectCharacter(defaultCharacter);
-        engine.startAnimation();
-        setInterval(showRandomState, STATE_CYCLE_MS);
     </script>
 </body>
 </html>
