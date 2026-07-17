@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VibeMon - Real-time AI Status Monitor</title>
+    <link rel="stylesheet" href="./css/vibemon-bubble.css">
     <style>
         * {
             margin: 0;
@@ -48,6 +49,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            margin-top: 2rem;
             padding: 0.875rem 2rem;
             border-radius: 8px;
             text-decoration: none;
@@ -116,18 +118,24 @@
         .live-display {
             margin: 2rem auto 0;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            gap: 0.75rem;
+            justify-content: center;
+            gap: 1rem;
         }
-        .live-state {
-            display: inline-block;
-            padding: 0.3rem 1rem;
-            border-radius: 999px;
+        /* vibemon-bubble.css supplies .bubble/.bubble-row/.bubble-tail etc.;
+           this page only needs the status row, sized/colored to match the
+           rest of the hero. */
+        .bubble {
+            padding: 0.6rem 1rem;
+            min-width: 160px;
             font-size: 0.85rem;
             font-weight: 600;
             font-family: monospace;
             transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        .bubble-tail {
+            transition: border-color 0.4s ease;
         }
     </style>
 </head>
@@ -136,15 +144,25 @@
         <h1>VibeMon</h1>
         <p class="tagline">Real-time AI Status Monitor</p>
 
-        <div class="live-display">
-            <div id="vibemon-live"></div>
-            <div class="live-state" id="live-state"></div>
-        </div>
-
         <p class="description">
             Display your AI coding assistant's state on ESP32 devices, Desktop App, or cloud service.
             See when Claude, Codex, Kiro, or OpenClaw is thinking, working, or done.
         </p>
+
+        <div class="live-display">
+            <div id="vibemon-live"></div>
+            <div class="bubble" id="live-bubble">
+                <div class="bubble-row" data-field="status">
+                    <span class="bubble-status-text"></span>
+                    <span class="bubble-dots">
+                        <span class="bubble-dot"></span><span class="bubble-dot"></span><span class="bubble-dot"></span><span class="bubble-dot"></span>
+                    </span>
+                </div>
+                <div class="bubble-tail"></div>
+            </div>
+        </div>
+
+        <div class="characters" id="characters"></div>
 
         <a href="https://vibemon.io" class="btn">
             Go to VibeMon.io
@@ -157,55 +175,49 @@
         <p class="description" style="margin-top: 1rem; margin-bottom: 0; font-size: 0.9rem;">
             Then open <strong>Settings &gt; AI Tools</strong> in the app to install hooks for Claude Code, Codex, Kiro, or OpenClaw with one click. See <a href="https://docs.vibemon.io">docs.vibemon.io</a> for details.
         </p>
-
-        <div class="characters">
-            <div class="character" data-character="vibemon">
-                <img src="./characters/vibemon.png" alt="VibeMon">
-                <div class="character-name">VibeMon</div>
-                <div class="character-platform">VibeMon</div>
-            </div>
-            <div class="character" data-character="codex">
-                <img src="./characters/codex.png" alt="Codex">
-                <div class="character-name">Codex</div>
-                <div class="character-platform">Codex CLI</div>
-            </div>
-            <div class="character" data-character="clawd">
-                <img src="./characters/clawd.png" alt="Clawd">
-                <div class="character-name">Clawd</div>
-                <div class="character-platform">Claude Code</div>
-            </div>
-            <div class="character" data-character="kiro">
-                <img src="./characters/kiro.png" alt="Kiro">
-                <div class="character-name">Kiro</div>
-                <div class="character-platform">Kiro IDE</div>
-            </div>
-            <div class="character" data-character="claw">
-                <img src="./characters/claw.png" alt="Claw">
-                <div class="character-name">Claw</div>
-                <div class="character-platform">OpenClaw</div>
-            </div>
-            <div class="character" data-character="daangni">
-                <img src="./characters/daangni.png" alt="Daangni">
-                <div class="character-name">Daangni</div>
-                <div class="character-platform">Daangn</div>
-            </div>
-        </div>
     </div>
 
     <script type="module">
         // Live character preview, like the Desktop app's character window:
-        // the engine (a copy of vibemon-app's src/engine/vibemon-engine.js)
-        // renders the canonical registry and cycles through random states.
+        // the engine and bubble renderer (canonical modules, vendored by
+        // vibemon-app and vibemon) render the registry and cycle through
+        // random states.
         import { createVibeMonEngine } from './js/vibemon-engine.js';
+        import { renderBubble } from './js/vibemon-bubble.js';
 
         const STATE_CYCLE_MS = 4000;
-        // Dark text on light state colors (matches the dashboard's mapping).
-        const DARK_TEXT_STATES = new Set(['start', 'packing', 'notification']);
+        // Registry entries carry a character's own name (characters.json's
+        // displayName, e.g. "Clawd"); the tool/platform subtitle shown below
+        // it isn't part of that schema, so it's kept here — same as vibemon's
+        // CHARACTER_DISPLAY_NAMES (src/lib/agent-states.ts).
+        const PLATFORM_LABELS = {
+            vibemon: 'VibeMon',
+            codex: 'Codex CLI',
+            clawd: 'Claude Code',
+            kiro: 'Kiro IDE',
+            claw: 'OpenClaw',
+            daangni: 'Daangn'
+        };
 
         const [{ characters, default: defaultCharacter }, { states }] = await Promise.all([
             fetch('./data/characters.json').then(r => r.json()),
             fetch('./data/states.json').then(r => r.json())
         ]);
+
+        // Build the gallery from the registry itself so every character it
+        // defines shows up here — no separate hand-kept list to fall out of sync.
+        const galleryEl = document.getElementById('characters');
+        for (const [name, config] of Object.entries(characters)) {
+            const card = document.createElement('div');
+            card.className = 'character';
+            card.dataset.character = name;
+            card.innerHTML = `
+                <img src="./characters/${config.image}" alt="${config.displayName}">
+                <div class="character-name">${config.displayName}</div>
+                <div class="character-platform">${PLATFORM_LABELS[name] || config.displayName}</div>
+            `;
+            galleryEl.appendChild(card);
+        }
 
         const engine = createVibeMonEngine(document.getElementById('vibemon-live'), {
             characters,
@@ -218,16 +230,17 @@
         await engine.init();
 
         const stateNames = Object.keys(states);
-        const label = document.getElementById('live-state');
+        const bubble = document.getElementById('live-bubble');
         let currentState = null;
         let currentCharacter = defaultCharacter;
 
         function render() {
             engine.setState({ state: currentState, character: currentCharacter });
             engine.render();
-            label.textContent = `${currentState} · ${states[currentState].text}`;
-            label.style.backgroundColor = states[currentState].color;
-            label.style.color = DARK_TEXT_STATES.has(currentState) ? '#000000' : '#FFFFFF';
+            const config = states[currentState];
+            renderBubble(bubble, {
+                status: { type: 'text', text: config.text, showLoading: config.loading, slow: currentState !== 'working' }
+            }, 'left', config.color);
         }
 
         function showRandomState() {
