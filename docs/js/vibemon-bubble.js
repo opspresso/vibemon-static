@@ -76,6 +76,7 @@ export function hexToRgb(hex) {
   let h = String(hex || '').replace('#', '');
   if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
   const num = parseInt(h, 16);
+  if (Number.isNaN(num)) return { r: 0, g: 0, b: 0 };
   return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
 }
 
@@ -141,7 +142,7 @@ export function renderBubble(bubbleEl, fields, tailSide, bgColor, opts) {
         row.style.display = 'none';
         continue;
       }
-      const pct = Math.max(0, Math.min(100, data.value));
+      const pct = Math.max(0, Math.min(100, Number(data.value) || 0));
       icon.textContent = data.icon;
       fill.style.width = pct + '%';
       fill.style.background = barColor(pct);
