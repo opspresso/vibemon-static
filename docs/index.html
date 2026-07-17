@@ -88,17 +88,21 @@
         }
         .character {
             text-align: center;
+            cursor: pointer;
         }
         .character img {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.1);
             padding: 8px;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .character img:hover {
             transform: scale(1.1);
+        }
+        .character.selected img {
+            box-shadow: 0 0 0 3px #ed8936;
         }
         .character-name {
             margin-top: 0.75rem;
@@ -109,12 +113,34 @@
             font-size: 0.75rem;
             color: #4a5568;
         }
+        .live-display {
+            margin: 2rem auto 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .live-state {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: monospace;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>VibeMon</h1>
         <p class="tagline">Real-time AI Status Monitor</p>
+
+        <div class="live-display">
+            <div id="vibemon-live"></div>
+            <div class="live-state" id="live-state"></div>
+        </div>
+
         <p class="description">
             Display your AI coding assistant's state on ESP32 devices, Desktop App, or cloud service.
             See when Claude, Codex, Kiro, or OpenClaw is thinking, working, or done.
@@ -133,32 +159,99 @@
         </p>
 
         <div class="characters">
-            <div class="character">
+            <div class="character" data-character="vibemon">
                 <img src="./characters/vibemon.png" alt="VibeMon">
                 <div class="character-name">VibeMon</div>
                 <div class="character-platform">VibeMon</div>
             </div>
-            <div class="character">
+            <div class="character" data-character="codex">
+                <img src="./characters/codex.png" alt="Codex">
+                <div class="character-name">Codex</div>
+                <div class="character-platform">Codex CLI</div>
+            </div>
+            <div class="character" data-character="clawd">
                 <img src="./characters/clawd.png" alt="Clawd">
                 <div class="character-name">Clawd</div>
                 <div class="character-platform">Claude Code</div>
             </div>
-            <div class="character">
+            <div class="character" data-character="kiro">
                 <img src="./characters/kiro.png" alt="Kiro">
                 <div class="character-name">Kiro</div>
                 <div class="character-platform">Kiro IDE</div>
             </div>
-            <div class="character">
+            <div class="character" data-character="claw">
                 <img src="./characters/claw.png" alt="Claw">
                 <div class="character-name">Claw</div>
                 <div class="character-platform">OpenClaw</div>
             </div>
-            <div class="character">
+            <div class="character" data-character="daangni">
                 <img src="./characters/daangni.png" alt="Daangni">
                 <div class="character-name">Daangni</div>
                 <div class="character-platform">Daangn</div>
             </div>
         </div>
     </div>
+
+    <script type="module">
+        // Live character preview, like the Desktop app's character window:
+        // the engine (a copy of vibemon-app's src/engine/vibemon-engine.js)
+        // renders the canonical registry and cycles through random states.
+        import { createVibeMonEngine } from './js/vibemon-engine.js';
+
+        const STATE_CYCLE_MS = 4000;
+        // Dark text on light state colors (matches the dashboard's mapping).
+        const DARK_TEXT_STATES = new Set(['start', 'packing', 'notification']);
+
+        const [{ characters, default: defaultCharacter }, { states }] = await Promise.all([
+            fetch('./data/characters.json').then(r => r.json()),
+            fetch('./data/states.json').then(r => r.json())
+        ]);
+
+        const engine = createVibeMonEngine(document.getElementById('vibemon-live'), {
+            characters,
+            defaultCharacter,
+            characterImageUrls: Object.fromEntries(
+                Object.entries(characters).map(([name, config]) => [name, `./characters/${config.image}`])
+            ),
+            states
+        });
+        await engine.init();
+
+        const stateNames = Object.keys(states);
+        const label = document.getElementById('live-state');
+        let currentState = null;
+        let currentCharacter = defaultCharacter;
+
+        function render() {
+            engine.setState({ state: currentState, character: currentCharacter });
+            engine.render();
+            label.textContent = `${currentState} · ${states[currentState].text}`;
+            label.style.backgroundColor = states[currentState].color;
+            label.style.color = DARK_TEXT_STATES.has(currentState) ? '#000000' : '#FFFFFF';
+        }
+
+        function showRandomState() {
+            const candidates = stateNames.filter(name => name !== currentState);
+            currentState = candidates[Math.floor(Math.random() * candidates.length)];
+            render();
+        }
+
+        // Gallery cards select the previewed character
+        const cards = document.querySelectorAll('.character[data-character]');
+        function selectCharacter(name) {
+            if (!characters[name]) return;
+            currentCharacter = name;
+            cards.forEach(card => card.classList.toggle('selected', card.dataset.character === name));
+            render();
+        }
+        cards.forEach(card => {
+            card.addEventListener('click', () => selectCharacter(card.dataset.character));
+        });
+
+        showRandomState();
+        selectCharacter(defaultCharacter);
+        engine.startAnimation();
+        setInterval(showRandomState, STATE_CYCLE_MS);
+    </script>
 </body>
 </html>

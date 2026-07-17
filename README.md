@@ -1,78 +1,36 @@
 # vibemon-static
 
-Static files (JS, PNG, etc.) served via GitHub Pages from the `docs` folder.
+Static assets (registry JSON, character PNGs) served via GitHub Pages from the `docs` folder.
 
 ## About
 
-This repository contains static web assets for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters.
+This repository is the canonical asset home for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters. State rendering itself lives in the consumers: the Desktop app's bundled engine ([vibemon-app](https://github.com/opspresso/vibemon-app) `src/engine/`) and the dashboard's canvas renderer ([vibemon](https://github.com/opspresso/vibemon) `src/lib/character-canvas.ts`).
 
 ## Files
 
 The `docs` folder contains:
-- `index.html` - Landing page
-- `demo.html` - Live simulator
-- `demo.css` - Demo styles
-- `demo.js` - Demo controller
-- `js/vibemon-engine-standalone.js` - VibeMon rendering engine
-- `characters/` - Character images (vibemon.png, clawd.png, kiro.png, claw.png, daangni.png)
+- `index.html` - Landing page (live character preview cycling random states)
+- `js/vibemon-engine.js` - Rendering engine used by the landing page (verbatim copy of vibemon-app's `src/engine/vibemon-engine.js`)
+- `characters/` - Character images (vibemon.png, codex.png, clawd.png, kiro.png, claw.png, daangni.png)
+- `data/` - Canonical state/character registry (states.json, characters.json)
 
-## VibeMon Engine
+## Canonical Registry
 
-### Usage
+This repository is the **single source of truth** for the state/character
+registry and character images consumed at runtime by the Desktop app
+([vibemon-app](https://github.com/opspresso/vibemon-app)) and the cloud
+dashboard ([vibemon](https://github.com/opspresso/vibemon)):
 
-```html
-<div class="vibemon-display" id="vibemon-display"></div>
-<script type="module">
-import { createVibeMonEngine } from 'https://static.vibemon.io/js/vibemon-engine-standalone.js';
+| Resource | URL |
+|----------|-----|
+| State registry | `https://static.vibemon.io/data/states.json` |
+| Character registry | `https://static.vibemon.io/data/characters.json` |
+| Character image | `https://static.vibemon.io/characters/{name}.png` |
 
-const container = document.getElementById('vibemon-display');
-const engine = createVibeMonEngine(container, {
-  useEmoji: true,
-  characterImageUrls: {
-    vibemon: 'https://static.vibemon.io/characters/vibemon.png',
-    clawd: 'https://static.vibemon.io/characters/clawd.png',
-    kiro: 'https://static.vibemon.io/characters/kiro.png',
-    claw: 'https://static.vibemon.io/characters/claw.png',
-    daangni: 'https://static.vibemon.io/characters/daangni.png'
-  }
-});
-
-await engine.init();
-engine.setState({
-  state: 'working',
-  character: 'clawd',
-  tool: 'Bash',
-  project: 'my-project',
-  model: 'Opus 4.5',
-  memory: 45,
-  usage5h: 62,
-  usageWeek: 78
-});
-engine.render();
-engine.startAnimation();
-</script>
-```
-
-`memory`, `usage5h`, `usageWeek` accept 0-100 and each render as a labeled bar (context memory, 5-hour usage window, weekly usage window).
-
-### Exports
-
-Besides `createVibeMonEngine`, the module also exports:
-
-```js
-import { states, CHARACTER_CONFIG, CONSTANTS, CHARACTER_NAMES, DEFAULT_CHARACTER } from 'https://static.vibemon.io/js/vibemon-engine-standalone.js';
-```
-
-- `states` - the `STATES` config object (colors, descriptions) keyed by state name
-- `CHARACTER_CONFIG` - per-character rendering config
-- `CHARACTER_NAMES` - `Object.keys(CHARACTER_CONFIG)`, useful for populating a character selector
-- `DEFAULT_CHARACTER` - the character used when none is set
-- `CONSTANTS` - shared engine constants
-
-### Lifecycle
-
-- `engine.stopAnimation()` - stops the animation loop without tearing down the engine
-- `engine.cleanup()` - stops the animation loop and releases resources; call this on unmount (e.g. in a SPA) to avoid a dangling `requestAnimationFrame` loop
+To change a state or character, edit the registry here — consumers fetch at
+runtime (with bundled fallbacks) or verify their vendored copies against
+these files. Adding a character requires both the registry entry in
+`data/characters.json` and a 128x128 PNG in `characters/`.
 
 ### States
 
@@ -92,10 +50,13 @@ import { states, CHARACTER_CONFIG, CONSTANTS, CHARACTER_NAMES, DEFAULT_CHARACTER
 ### Characters
 
 - `vibemon` - Purple (VibeMon, default)
+- `codex` - Blue cloud (Codex CLI; light eyes on a dark screen — uses `eyeColor`/`glassesColor`)
 - `clawd` - Orange (Claude Code)
 - `kiro` - White ghost (Kiro)
 - `claw` - Red (OpenClaw)
 - `daangni` - White/teal (Daangn)
+
+Each `data/characters.json` entry defines `displayName`/`color`/`image`/`eyes`/`effect`. Optional overlay colors override the near-black defaults for characters with a dark face: `eyeColor` sets the blink/happy stroke color (default `#000000`) and `glassesColor` sets the glasses frame color (default `#111111`).
 
 ## Access
 
@@ -108,16 +69,17 @@ The site is available at:
 ```
 vibemon-static/
 ├── docs/
-│   ├── index.html      # Landing page
-│   ├── demo.html       # Live demo (simulator)
-│   ├── demo.css
-│   ├── demo.js
+│   ├── index.html      # Landing page (live random-state preview)
 │   ├── favicon.ico
 │   ├── CNAME           # Custom domain (static.vibemon.io)
 │   ├── js/
-│   │   └── vibemon-engine-standalone.js
+│   │   └── vibemon-engine.js  # Copy of vibemon-app src/engine/vibemon-engine.js
+│   ├── data/
+│   │   ├── states.json
+│   │   └── characters.json
 │   └── characters/
 │       ├── vibemon.png
+│       ├── codex.png
 │       ├── clawd.png
 │       ├── kiro.png
 │       ├── claw.png
