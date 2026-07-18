@@ -9,7 +9,7 @@ This repository is the canonical asset home for VibeMon - a real-time status mon
 ## Files
 
 The `docs` folder contains:
-- `index.html` - Landing page (live character preview cycling random states)
+- `index.html` - Redirects to https://vibemon.io/ (this site serves assets only)
 - `js/vibemon-engine.js` - Character rendering engine (source of truth; vendored by vibemon-app and vibemon at build time, imported directly here)
 - `js/vibemon-bubble.js` - Speech-bubble rendering (source of truth; vendored by vibemon-app at build time, imported directly here)
 - `css/vibemon-bubble.css` - Speech-bubble styles (source of truth; vendored by vibemon-app at build time, linked directly here)
@@ -71,7 +71,7 @@ The site is available at:
 ```
 vibemon-static/
 ├── docs/
-│   ├── index.html      # Landing page (live random-state preview)
+│   ├── index.html      # Redirect to vibemon.io
 │   ├── favicon.ico
 │   ├── CNAME           # Custom domain (static.vibemon.io)
 │   ├── js/
