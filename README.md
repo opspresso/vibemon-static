@@ -4,15 +4,15 @@ Static assets (registry JSON, character PNGs) served via GitHub Pages from the `
 
 ## About
 
-This repository is the canonical asset home for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters. The canonical rendering modules also live here: `js/vibemon-engine.js` and `js/vibemon-bubble.js`/`css/vibemon-bubble.css` are the source of truth, vendored at build time by the Desktop app ([vibemon-app](https://github.com/opspresso/vibemon-app)) and, for the engine plus the bubble module's helpers, by the dashboard ([vibemon](https://github.com/opspresso/vibemon) `src/vendor/`).
+This repository is the canonical asset home for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters. The canonical rendering modules also live here: `js/vibemon-engine.js` and `js/vibemon-bubble.js`/`css/vibemon-bubble.css` are the source of truth, vendored at build time by the Desktop app ([vibemon-app](https://github.com/opspresso/vibemon-app)) and the dashboard ([vibemon](https://github.com/opspresso/vibemon) `src/vendor/`, which vendors the full modules but imports only the engine and the bubble module's pure helpers). No page on this site imports them at runtime — `index.html` is a pure redirect.
 
 ## Files
 
 The `docs` folder contains:
 - `index.html` - Redirects to https://vibemon.io/ (this site serves assets only)
-- `js/vibemon-engine.js` - Character rendering engine (source of truth; vendored by vibemon-app and vibemon at build time, imported directly here)
-- `js/vibemon-bubble.js` - Speech-bubble rendering (source of truth; vendored by vibemon-app at build time, imported directly here)
-- `css/vibemon-bubble.css` - Speech-bubble styles (source of truth; vendored by vibemon-app at build time, linked directly here)
+- `js/vibemon-engine.js` - Character rendering engine (source of truth; vendored by vibemon-app and vibemon at build time)
+- `js/vibemon-bubble.js` - Speech-bubble rendering (source of truth; vendored by vibemon-app at build time; vibemon vendors the full module but imports only its pure helpers)
+- `css/vibemon-bubble.css` - Speech-bubble styles (source of truth; vendored by vibemon-app at build time)
 - `characters/` - Character images (vibemon.png, clawd.png, codex.png, kiro.png, claw.png, daangni.png)
 - `data/` - Canonical state/character registry (states.json, characters.json)
 
@@ -56,7 +56,7 @@ these files. Adding a character requires both the registry entry in
 - `codex` - Blue cloud (Codex CLI; light eyes on a dark screen — uses `eyeColor`/`glassesColor`)
 - `kiro` - White ghost (Kiro)
 - `claw` - Red (OpenClaw)
-- `daangni` - White/teal (Daangn)
+- `daangni` - Peach/teal (Daangn)
 
 Each `data/characters.json` entry defines `displayName`/`color`/`image`/`eyes`/`effect`. Optional overlay colors override the near-black defaults for characters with a dark face: `eyeColor` sets the blink/happy stroke color (default `#000000`) and `glassesColor` sets the glasses frame color (default `#111111`).
 
