@@ -4,14 +4,14 @@ Static assets (registry JSON, character PNGs) served via GitHub Pages from the `
 
 ## About
 
-This repository is the canonical asset home for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters. The canonical rendering modules also live here: `js/vibemon-engine.js` and `js/vibemon-bubble.js`/`css/vibemon-bubble.css` are the source of truth, vendored at build time by the Desktop app ([vibemon-app](https://github.com/opspresso/vibemon-app)) and the dashboard ([vibemon](https://github.com/opspresso/vibemon) `src/vendor/`, which vendors the full modules but imports only the engine and the bubble module's pure helpers). No page on this site imports them at runtime — `index.html` is a pure redirect.
+This repository is the canonical asset home for VibeMon - a real-time status monitor for AI assistants (Claude Code, Codex, Kiro, OpenClaw) with pixel art characters. The canonical rendering modules also live here: `js/vibemon-engine.js` and `js/vibemon-bubble.js`/`css/vibemon-bubble.css` are the source of truth, vendored at build time by the Desktop app ([vibemon-app](https://github.com/opspresso/vibemon-app)) and the dashboard ([vibemon-web](https://github.com/opspresso/vibemon-web) `src/vendor/`, which vendors the full modules but imports only the engine and the bubble module's pure helpers). No page on this site imports them at runtime — `index.html` is a pure redirect.
 
 ## Files
 
 The `docs` folder contains:
 - `index.html` - Redirects to https://vibemon.io/ (this site serves assets only)
-- `js/vibemon-engine.js` - Character rendering engine (source of truth; vendored by vibemon-app and vibemon at build time)
-- `js/vibemon-bubble.js` - Speech-bubble rendering (source of truth; vendored by vibemon-app at build time; vibemon vendors the full module but imports only its pure helpers)
+- `js/vibemon-engine.js` - Character rendering engine (source of truth; vendored by vibemon-app and vibemon-web at build time)
+- `js/vibemon-bubble.js` - Speech-bubble rendering (source of truth; vendored by vibemon-app at build time; vibemon-web vendors the full module but imports only its pure helpers)
 - `css/vibemon-bubble.css` - Speech-bubble styles (source of truth; vendored by vibemon-app at build time)
 - `characters/` - Character images (vibemon.png, clawd.png, codex.png, kiro.png, claw.png, daangni.png)
 - `data/` - Canonical state/character registry (states.json, characters.json)
@@ -21,7 +21,7 @@ The `docs` folder contains:
 This repository is the **single source of truth** for the state/character
 registry and character images consumed at runtime by the Desktop app
 ([vibemon-app](https://github.com/opspresso/vibemon-app)) and the cloud
-dashboard ([vibemon](https://github.com/opspresso/vibemon)):
+dashboard ([vibemon-web](https://github.com/opspresso/vibemon-web)):
 
 | Resource | URL |
 |----------|-----|
@@ -106,7 +106,7 @@ To enable GitHub Pages:
 
 ## Related Projects
 
-- [vibemon](https://github.com/opspresso/vibemon) - Cloud dashboard & API ([vibemon.io](https://vibemon.io))
+- [vibemon-web](https://github.com/opspresso/vibemon-web) - Cloud dashboard & API ([vibemon.io](https://vibemon.io))
 - [vibemon-app](https://github.com/opspresso/vibemon-app) - Desktop App & ESP32 hardware client
 - [vibemon-docs](https://github.com/opspresso/vibemon-docs) - Agent hook installation & setup guide ([docs.vibemon.io](https://docs.vibemon.io))
 
