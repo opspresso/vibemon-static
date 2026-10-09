@@ -1,29 +1,7 @@
-# Repository Guidelines
+# Repository guidelines
 
-## Project Structure & Module Organization
+This repository is a compatibility publishing mirror. `mirror-source.json` identifies the canonical `opspresso/vibemon-web` commit. Make source, test, and tooling changes there; copy generated content here with Web's `scripts/sync-legacy.mjs`.
 
-This repository publishes canonical VibeMon assets directly from `docs/` through GitHub Pages. Registry data lives in `docs/data/`, 128×128 character PNGs in `docs/characters/`, and shared rendering sources in `docs/js/` and `docs/css/` — the 2D engine, the 3D engine (`vibemon-engine-3d.js` with `monster-states.js`), and the speech bubble. The 3D engine takes its three.js namespace from the consumer as `options.THREE`; never import a renderer library here. `docs/index.html` only redirects visitors to the main site. Use `scripts/validate-registry.mjs` for registry checks. The `prompts/` directory contains sprite-generation references and Python utilities; generated outputs should not be committed unless they are intentional project assets.
+`docs/` is generated except `docs/CNAME`. Preserve the CNAME and existing public paths. Update generated content and metadata together, then run the canonical comparison before committing. Keep root README and this guidance concise. `CLAUDE.md` links here.
 
-## Build, Test, and Development Commands
-
-There is no package installation or compile step. Use Node.js 20, matching CI.
-
-- `node scripts/validate-registry.mjs` validates JSON structure, supported state values, image references, 128×128 coordinate bounds, and each character's 3D `theme` palette.
-- `python3 prompts/verify_sprite.py path/to/sheet.png` inspects a generated sprite sheet. It requires Pillow.
-- `python3 -m http.server 8000 --directory docs` serves the published tree locally at `http://localhost:8000`.
-
-Run the registry validator before every pull request that changes `docs/data/` or `docs/characters/`.
-
-## Coding Style & Naming Conventions
-
-Match the existing file style: two-space indentation and semicolons in JavaScript, two-space indentation in JSON, and four-space indentation with `snake_case` names in Python. JavaScript uses ES modules and `camelCase`; constants use `UPPER_SNAKE_CASE`. Keep character IDs and PNG filenames lowercase, using only letters, digits, and hyphens (for example, `docs/characters/my-agent.png`). Preserve the dependency-free static design and avoid unrelated formatting changes.
-
-## Testing Guidelines
-
-GitHub Actions runs the registry validator on pushes and pull requests to `main`; no coverage threshold or general test suite is configured. Treat validator failures as blocking. When changing rendering behavior, exercise the affected module in a consuming project or a focused browser fixture and describe that manual verification in the pull request.
-
-## Commit & Pull Request Guidelines
-
-Recent history follows Conventional Commit-style subjects such as `feat: support model-scoped usage label` and `docs: update README references`. Use an imperative, scoped summary with an appropriate prefix (`feat:`, `fix:`, `docs:`, or `ci:`), and keep each commit focused.
-
-Pull requests should explain the user-visible or registry impact, list validation performed, and link related issues. Include before/after screenshots for sprite, CSS, or rendering changes. Adding a character requires its registry entry (with the six-slot 3D `theme`) and a matching 128×128 PNG. Never commit `.env`, `.env.local`, API keys, or generated files containing secrets.
+Use Conventional Commits. PRs must identify the source revision, compatibility checks, and any required deployment configuration. Never commit credentials. Repository deletion, archival, production publication, and main-branch merges are separate authorized actions.
